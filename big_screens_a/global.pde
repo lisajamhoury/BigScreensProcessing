@@ -14,6 +14,4 @@ void setupGlobals() {
   ONETHIRD = 0.31*width;
   TWOTHIRD = 0.57*width;
   AREA = width * height;
-  
-  
 }
