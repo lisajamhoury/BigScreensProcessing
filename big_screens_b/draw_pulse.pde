@@ -1,5 +1,18 @@
 //////////////// BEGIN PULSE  ////////////////
 boolean beat = false;
+int pulseExDuration;  
+int targetBoundX;
+int targetBoundY;
+
+int pulseExpandUnitX;
+int pulseExpandUnitY;
+int pulseStartTime;
+int pulseIncTimeX;
+int pulseIncTimeY;
+//int pulseTimeElapsed;
+
+int pulseBoundX = 2; //starting x boundaries 
+int pulseBoundY = 2; //starting y boundaries
 
 //////////////// MULTI PULSE ////////////////
 boolean growing = false;
@@ -11,51 +24,44 @@ ArrayList<PulseMarker> multiPulses;
 //float pulseXBound;
 //float pulseXBoundInc;
  
-void setupMultiPulse() {
-  //pulseXBound = 0.01 * width;
-  //pulseXBoundInc = 0.00005 * width;
+void setupMultiPulse() { 
+ multiPulses = new ArrayList<PulseMarker>();
+ 
+ pulseExDuration = 60000; //expand pulse over one minute  
+ targetBoundX = columns/2; // set the target width for each half
+ targetBoundY = rows/4; // set the target height for each half
+ 
+ pulseExpandUnitX = pulseExDuration/targetBoundX; //how many millis between each x bound expansion
+ pulseExpandUnitY = pulseExDuration/targetBoundY; //how many millis between each y bound expansion
   
-  multiPulses = new ArrayList<PulseMarker>();
 }
 
-PVector getPulseLocation() {
- PVector newPulseLoc;
- float newX = PULSECTR.x; 
- float newY = PULSECTR.y;
- 
- int xOrY = floor(random(2));
 
- int pulseXBound1 = 6; // variable this over time
- int pulseYBound1 = 6; // variable this over time
+void expandPulseBounds() {
+ int pulseTimeElapsedX = millis() - pulseIncTimeX;
+ int pulseTimeElapsedY = millis() - pulseIncTimeY;
  
-  if (xOrY == 0) {
-   // choose a line 
-   int xLine = floor(random(-pulseXBound1, pulseXBound1));
-   float scaleUpXLine = resolution * xLine; // get amount of width to scale by
-   newX = PULSECTR.x + scaleUpXLine;
-   //println(width/newX);
-   
-   newY = random(0, height);
-   //float yVariant = pulseYBound1* gridUnitH;
-   //float yOff = random(-yVariant, yVariant);
-   //newY = newY + yOff;
+ if (pulseTimeElapsedX > pulseExpandUnitX) {
+   println("increaseX");
+   println(pulseBoundX);
+   if (pulseBoundX <= targetBoundX+5) { // stop incrementing when all columns are in bounds. need to take into account pulse ctr shift
+     pulseBoundX++;
+   }
+       
+   pulseIncTimeX = millis();
  }
  
- if (xOrY == 1) { 
-   // choose a line 
-   int yLine = floor(random(-pulseYBound1, pulseYBound1));
-   float scaleUpYLine = resolution * yLine; // get amount of width to scale by
-   newY = PULSECTR.y + scaleUpYLine;
-   
-   //float xVariant = pulseXBound1 * resolution;
-   //float xOff = random(-xVariant, xVariant);
-   //newX = newX + xOff;
-   newX = random(0, width);
+ if (pulseTimeElapsedY > pulseExpandUnitY) {
+   println("increaseY");
+   println(pulseBoundY);
+   if (pulseBoundY <= targetBoundY) {
+     pulseBoundY++;
+   }
+   pulseIncTimeY = millis();
  }
-
- newPulseLoc = new PVector(newX, newY);
- return newPulseLoc;
+ 
 }
+
 
 void drawMultiPulse(){
   fill(0, 10);
@@ -70,7 +76,10 @@ void drawMultiPulse(){
     if (pulseCount == 2) {
       pulseCount = 0;
       PVector pulseLoc = getPulseLocation();
-      multiPulses.add(new PulseMarker(pulseLoc));
+      // check to make sure you have a bpm
+      if (currentBpm > 0) { 
+        multiPulses.add(new PulseMarker(pulseLoc));
+      }
     }
   }
  
@@ -89,6 +98,7 @@ void drawMultiPulse(){
  if (drawPulse == true) {
    runMultiPulse();
  }
+
 }
 
 void runMultiPulse() {  
@@ -102,5 +112,67 @@ void runMultiPulse() {
   popMatrix();
   //pulseXBound += pulseXBoundInc;
 }
+
+
+PVector getPulseLocation() {
+ PVector newPulseLoc;
+ 
+ newPulseLoc = hardXandY(pulseBoundX, pulseBoundY);
+ 
+ return newPulseLoc;
+}
+
+PVector hardXandY(int xBound, int yBound) {
+ PVector newLoc = new PVector();
+  
+ // choose x 
+ 
+ int xLine = floor(random(-xBound, xBound));
+ float scaleUpXLine = resolution * xLine; // get amount of width to scale by
+ newLoc.x = PULSECTR.x + scaleUpXLine;
+    
+ // choose y
+ int yLine = floor(random(-yBound, yBound));
+ float scaleUpYLine = resolution * yLine; // get amount of width to scale by
+ newLoc.y = PULSECTR.y + scaleUpYLine;
+ 
+ return newLoc; 
+}
+
+PVector hardXorY(int xBound, int yBound) {
+  PVector newLoc = new PVector();
+  
+  int xOrY = floor(random(2));
+  if (xOrY == 0) {
+   // choose a line  
+   int xLine = floor(random(-xBound, xBound));
+   float scaleUpXLine = resolution * xLine; // get amount of width to scale by
+   newLoc.x = PULSECTR.x + scaleUpXLine;
+   //println(width/newX);
+   
+   newLoc.y = random(0, height);
+   //float yVariant = pulseYBound1* gridUnitH;
+   //float yOff = random(-yVariant, yVariant);
+   //newY = newY + yOff;
+ }
+ 
+ if (xOrY == 1) { 
+   // choose a line 
+   int yLine = floor(random(-yBound, yBound));
+   float scaleUpYLine = resolution * yLine; // get amount of width to scale by
+   newLoc.y = PULSECTR.y + scaleUpYLine;
+   
+   //float xVariant = pulseXBound1 * resolution;
+   //float xOff = random(-xVariant, xVariant);
+   //newX = newX + xOff;
+   newLoc.x = random(0, width);
+ }
+ return newLoc; 
+}
+
+
+
+
+
 
 //////////////// END MULTI PULSE ////////////////

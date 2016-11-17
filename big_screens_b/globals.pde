@@ -8,8 +8,8 @@ float AREA;
 
 //GRID 
 int resolution;
-int gridUnitW;
-int gridUnitH;
+int columns;
+int rows;
 
 void setupGlobals() {  
   //Set positioning constants
@@ -21,9 +21,9 @@ void setupGlobals() {
   AREA = width * height;
   
   resolution = floor(width/180); // scale resolution to canvas size 
-  gridUnitW = width / resolution;
-  gridUnitH = height / resolution;  
+  columns = width / resolution;
+  rows = height / resolution;  
   println(resolution);
-  println(gridUnitW, gridUnitH);
+  println(columns, rows);
   
 }

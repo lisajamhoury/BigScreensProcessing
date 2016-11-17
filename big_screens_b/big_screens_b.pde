@@ -16,22 +16,24 @@ void setup() {
 }
 
 void draw() {
- //background(0);  // what to do about background? 
  getSensorData();
-
  
  drawPulse = true;
  if (currentBpm > 10) {
+   if (!growing) {
+     //begin timer
+     pulseStartTime = millis();
+     pulseIncTimeX = pulseStartTime;
+     pulseIncTimeY = pulseStartTime;
+     println("beginnig");
+     println(pulseStartTime);
+   }
    growing = true;
+   expandPulseBounds();
+   
+   
  }
  drawMultiPulse();
- println(currentBpm);
- 
- 
- ////TURN ON FOR EMG
- //background(0);
- //drawEmgVehicles();
- //emgRunning = true;
  
  // TO DO -- ADD LABELS TO THESE
  if (key == '1') {
