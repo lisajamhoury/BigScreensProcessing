@@ -1,5 +1,6 @@
 //variables for manipulating data
-float pulseSensor = 0;
+// TO DO REFACTOR -- floats become ints for sensor data
+int pulseSensor = 0;
 float emg1LeftSensor = 0;
 float emg1RightSensor = 0;
 float emg2LeftSensor = 0;
@@ -9,10 +10,21 @@ float emg2RightSensor = 0;
 float EMGLOWER = 20;
 float EMGUPPER = 1000;
 
+//Pulse bpm timing
+int pulseTimeCtr; // count time elapsed since last calculation
+int pulseCtr = 0; // count number of pulses
+int BPMTIMESPAN = 5000;
+int ONEMINUTE = 60000;
+int lastPulseSensorVal;
+int currentBpm;
+
 
 //pulse vairables
 boolean pulse = false;
 
+void setupProcessData() {
+  pulseTimeCtr = millis();
+}
 
 void getSensorData() { 
  emg1LeftSensor = emg1L;
@@ -21,16 +33,27 @@ void getSensorData() {
  emg2RightSensor = emg1R;
  pulseSensor = polar0;
  
- readPulse();
+ calculateBpm();
 }
 
-void readPulse() {
- if (pulseSensor == 1) {
-   pulse = true;
- } else {
-   pulse = false;
+
+void calculateBpm() {
+ int timeElapsed = millis() - pulseTimeCtr; 
+
+ if (pulseSensor == 1 && lastPulseSensorVal == 0) {
+   pulseCtr++;
  }
+  
+ if (timeElapsed > BPMTIMESPAN) {
+  currentBpm = (ONEMINUTE/BPMTIMESPAN)*pulseCtr; 
+  pulseTimeCtr = millis();
+  pulseCtr = 0;
+ }
+ lastPulseSensorVal = pulseSensor;
 }
+
+
+
 
 // Get logic from left and right emg sensors
 // TODO  delete all color data? 

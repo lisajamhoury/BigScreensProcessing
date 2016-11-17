@@ -20,9 +20,10 @@ void setupGlobals() {
   TWOTHIRD = 0.57*width;
   AREA = width * height;
   
-  resolution = floor(0.0055556 * width); // scale resolution to canvas size 
-  println(resolution);
+  resolution = floor(width/180); // scale resolution to canvas size 
   gridUnitW = width / resolution;
   gridUnitH = height / resolution;  
+  println(resolution);
+  println(gridUnitW, gridUnitH);
   
 }

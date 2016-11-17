@@ -11,7 +11,6 @@ class FlowField {
     rows = height / resolution;
     horMid = cols/2;
     field = new PVector[cols][rows];
-    println(cols, rows);
   }
 
   void update(PVector iLoc) {
