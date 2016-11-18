@@ -14,6 +14,12 @@ int pulseIncTimeY;
 int pulseBoundX = 2; //starting x boundaries 
 int pulseBoundY = 2; //starting y boundaries
 
+float pulseRectHeight = 0.01 * height;  // 0.0006 * width; 
+float ctrPosLocY;
+
+boolean animate = false;
+
+
 //////////////// MULTI PULSE ////////////////
 boolean growing = false;
 boolean drawPulse = false; // allows for pulse array to grow but not be drawn on screen
@@ -33,6 +39,8 @@ void setupMultiPulse() {
  
  pulseExpandUnitX = pulseExDuration/targetBoundX; //how many millis between each x bound expansion
  pulseExpandUnitY = pulseExDuration/targetBoundY; //how many millis between each y bound expansion
+ 
+ ctrPosLocY = PULSECTR.y;
   
 }
 
@@ -42,8 +50,6 @@ void expandPulseBounds() {
  int pulseTimeElapsedY = millis() - pulseIncTimeY;
  
  if (pulseTimeElapsedX > pulseExpandUnitX) {
-   println("increaseX");
-   println(pulseBoundX);
    if (pulseBoundX <= targetBoundX+5) { // stop incrementing when all columns are in bounds. need to take into account pulse ctr shift
      pulseBoundX++;
    }
@@ -52,20 +58,22 @@ void expandPulseBounds() {
  }
  
  if (pulseTimeElapsedY > pulseExpandUnitY) {
-   println("increaseY");
-   println(pulseBoundY);
    if (pulseBoundY <= targetBoundY) {
      pulseBoundY++;
    }
    pulseIncTimeY = millis();
- }
- 
+ } 
 }
 
+void noBoundExpansion() {
+ pulseBoundX = 5;
+ pulseBoundY= 5;
+}
 
 void drawMultiPulse(){
-  fill(0, 10);
-  rect(0, 0, width, height);  
+  //clear background 
+  //fill(0);
+  //rect(0, 0, width, height);
   //If pulse array is growing -- add on pulse
   if (growing == true) { 
   if (pulseSensor == 1 && beat == false) {
@@ -89,12 +97,20 @@ void drawMultiPulse(){
  } //growing true
  
  //If pulse array is shrinking -- remove on pulse 
- if (growing == false && pulseSensor == 1) {
-   if (multiPulses.size() > 0) {
-      int pos = multiPulses.size() - 1;
-      multiPulses.remove(pos);
+ if (growing == false) {
+   if (pulseSensor == 1  && beat == false) {
+     beat = true;
+     if (multiPulses.size() > 0) {
+        int pos = multiPulses.size() - 1;
+        multiPulses.remove(pos);
+    }
+   }
+  if ( pulseSensor == 0 && beat == true ) {
+   beat = false;
   }
- }
+ } // growing false 
+   
+ // Draw pulse is true, otherwise, just keep count   
  if (drawPulse == true) {
    runMultiPulse();
  }
@@ -102,31 +118,40 @@ void drawMultiPulse(){
 }
 
 void runMultiPulse() {  
-  pushMatrix();
-  //translate(PULSECTR.x, PULSECTR.y);
   if (multiPulses.size() > 0) {
     for (int i = 0; i < multiPulses.size(); i++) {
      multiPulses.get(i).run();
     }
   }
-  popMatrix();
-  //pulseXBound += pulseXBoundInc;
 }
 
 
 PVector getPulseLocation() {
  PVector newPulseLoc;
- 
  newPulseLoc = hardXandY(pulseBoundX, pulseBoundY);
- 
+ //newPulseLoc = getCenterPulse();
  return newPulseLoc;
 }
+
+
+PVector getCenterPulse() {
+  PVector newLoc = new PVector();
+
+  newLoc.x = PULSECTR.x;
+  newLoc.y = ctrPosLocY;
+  ctrPosLocY += pulseRectHeight;
+  println(ctrPosLocY);
+  //int yUpOrDown = floor(random(0,2)); // get a 0 or 1
+  
+  return newLoc;
+  
+}
+
 
 PVector hardXandY(int xBound, int yBound) {
  PVector newLoc = new PVector();
   
- // choose x 
- 
+ // choose x
  int xLine = floor(random(-xBound, xBound));
  float scaleUpXLine = resolution * xLine; // get amount of width to scale by
  newLoc.x = PULSECTR.x + scaleUpXLine;
@@ -148,12 +173,7 @@ PVector hardXorY(int xBound, int yBound) {
    int xLine = floor(random(-xBound, xBound));
    float scaleUpXLine = resolution * xLine; // get amount of width to scale by
    newLoc.x = PULSECTR.x + scaleUpXLine;
-   //println(width/newX);
-   
    newLoc.y = random(0, height);
-   //float yVariant = pulseYBound1* gridUnitH;
-   //float yOff = random(-yVariant, yVariant);
-   //newY = newY + yOff;
  }
  
  if (xOrY == 1) { 

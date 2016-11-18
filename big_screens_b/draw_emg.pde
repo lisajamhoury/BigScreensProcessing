@@ -1,8 +1,8 @@
 
 // Collect setup functions for draw functions here 
 void setupDrawSensors() {
- setupEmgVehicles();
- setupMultiPulse(); 
+  setupEmgVehicles();
+  setupMultiPulse();
 }
 
 
@@ -10,7 +10,7 @@ void setupDrawSensors() {
 import java.util.Iterator;
 
 //DEBUG
-boolean debugFrameRate = true;
+boolean debugFrameRate = false;
 boolean debugFlowField = false;
 
 FlowField flowfield;
@@ -29,7 +29,7 @@ PVector v1RStart;
 PVector v2LStart;
 PVector v2RStart;
 
-float minSpeed = 0.00000030;
+float minSpeed =  0.00000007; //0.00000030;
 float maxSpeed = 4*minSpeed;
 float force = 0.0000001;
 
@@ -38,23 +38,22 @@ int emgState = 0;
 
 void setupEmgVehicles() {
   noiseSeed(7); // 7 ok, but a bit too noisy on right
-  
+
   flowfield = new FlowField(resolution); // resolution declared globally
   magnet = new ArrayList<Magnet>(); 
   fieldOutPointsLeft = new ArrayList<PVector>();
   fieldOutPointsRight = new ArrayList<PVector>();
-  
+
   flowfield.init();
-  
+
   PVector magnetPos = new PVector(PULSECTR.x, 1.25 * PULSECTR.y);
   flowfield.update(magnetPos);
-  
 
   vehicles1L = new ArrayList<Vehicle>();
   vehicles1R = new ArrayList<Vehicle>();
   vehicles2L = new ArrayList<Vehicle>();
   vehicles2R = new ArrayList<Vehicle>();
- 
+
   //EMG START POSITIONS 
   float v1Lx = 0;
   float v1Ly = 0.5 * height;
@@ -64,7 +63,7 @@ void setupEmgVehicles() {
   float v2Ly = 0.2 * height;
   float v2Rx = width-1;
   float v2Ry = 0.35 * height;
-  
+
   v1LStart = new PVector(v1Lx, v1Ly);
   v1RStart = new PVector(v1Rx, v1Ry);
   v2LStart = new PVector(v2Lx, v2Ly);
@@ -76,18 +75,14 @@ void drawEmgVehicles() {
   addEmgVehicles();
   runEmgVehicles();
   if (debugFrameRate == true) {
-   debugFrameRate();
+    debugFrameRate();
   }
- 
+
   if (debugFlowField == true) {
-   debugFlowField();
-  } 
-  
-  
+    debugFlowField();
+  }
 }
 void addEmgVehicles() {
-  
-  
   float bright1L = map(emg1LeftSensor, 20, 1000, 10, 255);
   float bright1R = map(emg1RightSensor, 20, 1000, 10, 255);
   float bright2L = map(emg2LeftSensor, 20, 1000, 10, 25);
@@ -95,12 +90,26 @@ void addEmgVehicles() {
 
   String emg1Logic = emgLogic(emg1LeftSensor, emg1RightSensor);
   String emg2Logic = emgLogic(emg2LeftSensor, emg2RightSensor);
-  
+
   if (emgState == 5) {
     makeCrazyLinesLogic(emg1Logic, v1LStart, v1RStart, fieldOutPointsLeft);
     makeCrazyLinesLogic(emg2Logic, v2LStart, v2RStart, fieldOutPointsRight);
   }
-  
+
+  if (emgState == 6) {
+    //makeBigTriangle();
+    println("herer");
+    v1LStart.x = 0.016455347;
+    v1LStart.y = 207.82713;
+    //v1LStart.x = 0.001;
+    //v1LStart.y = height - 0.01;
+    //int lastPos = vehicles1L.size()-1;
+    //Vehicle myVehicle = vehicles1L.get(lastPos);
+    //myVehicle.position.x.set(0.001);
+    
+    
+  }
+
   vehicles1L.add(new Vehicle(emg1Logic, bright1L, v1LStart.x, v1LStart.y, random(AREA*minSpeed, AREA*maxSpeed), random(AREA*force)));
   vehicles1R.add(new Vehicle(emg1Logic, bright1R, v1RStart.x, v1RStart.y, random(AREA*minSpeed, AREA*maxSpeed), random(AREA*force)));
   vehicles2L.add(new Vehicle(emg2Logic, bright2L, v2LStart.x, v2LStart.y, random(AREA*minSpeed, AREA*maxSpeed), random(AREA*force)));
@@ -108,14 +117,14 @@ void addEmgVehicles() {
 }
 
 void runEmgVehicles() {
- runVehiclesIterator(vehicles1L, v1LStart, "left");
- runVehiclesIterator(vehicles1R, v1RStart, "left");
- runVehiclesIterator(vehicles2L, v2LStart, "right");
- runVehiclesIterator(vehicles2R, v2RStart, "right");
+  runVehiclesIterator(vehicles1L, v1LStart, "left");
+  runVehiclesIterator(vehicles1R, v1RStart, "left");
+  runVehiclesIterator(vehicles2L, v2LStart, "right");
+  runVehiclesIterator(vehicles2R, v2RStart, "right");
 }
 
 void runVehiclesIterator(ArrayList<Vehicle> vehicles, PVector startPos, String side) {
-   if (emgRunning == true) {
+  if (emgRunning == true) {
     Iterator<Vehicle> it = vehicles.iterator();
     while (it.hasNext()) {
       Vehicle v = it.next();
@@ -130,7 +139,7 @@ void runVehiclesIterator(ArrayList<Vehicle> vehicles, PVector startPos, String s
             startPos.set(v.position);
           }
         }
-        
+
         if (side == "right") {
           if (v.position.x < 0.55 * width) {
             PVector reStart = new PVector(width-1, random(height));
@@ -139,13 +148,13 @@ void runVehiclesIterator(ArrayList<Vehicle> vehicles, PVector startPos, String s
             startPos.set(v.position);
           }
         }
-            
+
         //startPos = v.position.copy(); 
         //startPos.set(v.position);
         it.remove();
       }
     }
-  } 
+  }
 }
 
 
@@ -153,7 +162,7 @@ void makeCrazyLinesLogic(String logic, PVector startPosL, PVector startPosR, Arr
   int noOutPoints = fieldPtsArray.size();
   int noPoint = int(random(noOutPoints));
   PVector newStart = fieldPtsArray.get(noPoint);
-  
+
   if (logic == "high") {
     startPosL.x = newStart.x;
     startPosL.y = height;
@@ -176,7 +185,7 @@ void makeCrazyLinesLogic(String logic, PVector startPosL, PVector startPosR, Arr
 void debugFrameRate() {
   //FRAMERATE BOX
   colorMode(RGB);
-  fill(255,0,0);
+  fill(255, 0, 0);
   rect(0, 0, 100, 100);
   fill(255);
   text(floor(frameRate), 10, 40);
@@ -187,13 +196,13 @@ void debugFrameRate() {
 }
 
 void debugFlowField() {
-   flowfield.display();
+  flowfield.display();
 
   Iterator<Magnet> it = magnet.iterator();
   while (it.hasNext()) {
     Magnet m = it.next();
     m.display();
-  } 
+  }
 }
 
 

@@ -23,7 +23,4 @@ void setupGlobals() {
   resolution = floor(width/180); // scale resolution to canvas size 
   columns = width / resolution;
   rows = height / resolution;  
-  println(resolution);
-  println(columns, rows);
-  
 }

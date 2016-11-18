@@ -2,7 +2,7 @@ import oscP5.*;
 import netP5.*;
  
 //config
-int listeningPort = 6001;  
+int listeningPort = 6003;  
 
 //variables for receiving data
 int polar0;
@@ -35,5 +35,5 @@ void oscEvent(OscMessage theOscMessage) {
   //print the data
   //println("polar: " + polar0);
   //println("emg1: " + emg1L + ", " + emg1R);
-  //println("emg1: " + emg2L + ", " + emg2R);
+  //println("emg2: " + emg2L + ", " + emg2R);
 }

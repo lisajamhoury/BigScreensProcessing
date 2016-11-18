@@ -12,6 +12,7 @@ class Vehicle {
   ArrayList<PVector> prevPositions;
   boolean wrapping = false;
   String vLogic;
+  
 
   PVector prevPos;
 
@@ -114,6 +115,11 @@ class Vehicle {
     if (emgState == 5) {
      justLines();
     }
+    
+    // using this now to draw triangle
+    if (emgState == 6) {
+     justLines();
+    }
 
     //strokeWeight(lineStk);
     strokeWeight(lineStk);
@@ -131,10 +137,12 @@ class Vehicle {
   void justFlow() {
     if (wrapping == true) {
       stroke(0, 0, 0);
-      fill(0, 0, 0);
+      //fill(0, 0, 0);
+      noFill();
     } else {
       stroke(0, 0, vBright);
-      fill(0, 0, vBright);
+      //fill(0, 0, vBright);
+      noFill();
     }
   }
 
@@ -166,8 +174,6 @@ class Vehicle {
     if (wrapping == true) {
       stroke(0, 0, 255);
       fill(0, 0, 255);
-      //stroke(0, 0, vBright);
-      //fill(0, 0, vBright);
     } else {
       stroke(0, 0, 0);
       fill(0, 0, 0);
