@@ -19,5 +19,5 @@ void setup() {
     background(0);
     getSensorData();
     runControls();
-    println(emgState);
+    //println(emgState);
   }

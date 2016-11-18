@@ -82,6 +82,24 @@ void drawEmgVehicles() {
     debugFlowField();
   }
 }
+
+void drawBigTriangle() {
+  String emg1Logic = emgLogic(emg1LeftSensor, emg1RightSensor);
+  String emg2Logic = emgLogic(emg2LeftSensor, emg2RightSensor);
+  println("triangle");
+  println(emg1Logic, emg2Logic);
+  // draw white triange if 
+  if (emg1Logic == "high" && emg2Logic == "high") {
+    println("BOTH HIGH!!!!!!!");
+    fill(255);  
+    beginShape();
+    vertex(0, height);
+    vertex(width, 0);
+    vertex(width, height);
+    endShape();
+  }
+}
+
 void addEmgVehicles() {
   float bright1L = map(emg1LeftSensor, 20, 1000, 10, 255);
   float bright1R = map(emg1RightSensor, 20, 1000, 10, 255);
@@ -96,19 +114,19 @@ void addEmgVehicles() {
     makeCrazyLinesLogic(emg2Logic, v2LStart, v2RStart, fieldOutPointsRight);
   }
 
-  if (emgState == 6) {
-    //makeBigTriangle();
-    println("herer");
-    v1LStart.x = 0.016455347;
-    v1LStart.y = 207.82713;
-    //v1LStart.x = 0.001;
-    //v1LStart.y = height - 0.01;
-    //int lastPos = vehicles1L.size()-1;
-    //Vehicle myVehicle = vehicles1L.get(lastPos);
-    //myVehicle.position.x.set(0.001);
-    
-    
-  }
+  //if (emgState == 6) {
+  //  //makeBigTriangle();
+  //  println("herer");
+  //  v1LStart.x = 0.016455347;
+  //  v1LStart.y = 207.82713;
+  //  //v1LStart.x = 0.001;
+  //  //v1LStart.y = height - 0.01;
+  //  //int lastPos = vehicles1L.size()-1;
+  //  //Vehicle myVehicle = vehicles1L.get(lastPos);
+  //  //myVehicle.position.x.set(0.001);
+
+
+  //}
 
   vehicles1L.add(new Vehicle(emg1Logic, bright1L, v1LStart.x, v1LStart.y, random(AREA*minSpeed, AREA*maxSpeed), random(AREA*force)));
   vehicles1R.add(new Vehicle(emg1Logic, bright1R, v1RStart.x, v1RStart.y, random(AREA*minSpeed, AREA*maxSpeed), random(AREA*force)));

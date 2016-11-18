@@ -158,6 +158,12 @@ void keyPressed() {
       println("d");
       minSpeed-= 0.00000001;
     }
+    
+    if (keyCode == LEFT) {
+     println("enter");
+     drawBigTriangle();
+
+    }
   }
 }
 
@@ -197,9 +203,7 @@ void runControls() {
   }
 
   if (emg6 == true) {
-    drawEmgVehicles();
-    emgRunning = true;
-    emgState = 6;
+    drawBigTriangle();
   }
 
   if (pulse1 == true) {
