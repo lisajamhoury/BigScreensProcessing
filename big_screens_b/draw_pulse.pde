@@ -100,7 +100,12 @@ void drawMultiPulse(){
  if (growing == false) {
    if (pulseSensor == 1  && beat == false) {
      beat = true;
-     if (multiPulses.size() > 0) {
+     if (multiPulses.size() > 1) {
+        int pos = multiPulses.size() - 1;
+        multiPulses.remove(pos);
+        pos = multiPulses.size() - 1;
+        multiPulses.remove(pos);
+    } else if (multiPulses.size() > 0) {
         int pos = multiPulses.size() - 1;
         multiPulses.remove(pos);
     }

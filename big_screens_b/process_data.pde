@@ -29,8 +29,8 @@ void setupProcessData() {
 void getSensorData() { 
  emg1LeftSensor = emg1L;
  emg1RightSensor = emg1R;
- emg2LeftSensor = emg1L;
- emg2RightSensor = emg1R;
+ emg2LeftSensor = emg2L;
+ emg2RightSensor = emg2R;
  pulseSensor = polar0;
  
  calculateBpm();
