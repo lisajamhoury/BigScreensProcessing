@@ -1,4 +1,3 @@
-
 // Collect setup functions for draw functions here 
 void setupDrawSensors() {
   setupEmgVehicles();
@@ -6,19 +5,30 @@ void setupDrawSensors() {
 }
 
 
-//////////////// EMG VEHICLES ////////////////
+//////////////// EMG VARIABLES ////////////////
 import java.util.Iterator;
 
 //DEBUG
 boolean debugFrameRate = false;
 boolean debugFlowField = false;
+boolean debugOutPoints = false;
 
-FlowField flowfield;
+//Set top and bottom for EMG sensors 
+int emg1Low = 100;
+int emg1High = 1000;
+int emg2Low = 100;
+int emg2High = 1000;
+int emgMapLow = 100;
+int emgMapHigh = 255;
+
+//Set noise for each flowfield
+int noise1 = 7;
+int noise2 = 14;
+
+FlowField flowfield1; // field for left emg sensors of both performers
+FlowField flowfield2; // field for right emg sensors of both performers
 ArrayList<Magnet> magnet;
 boolean emgRunning = true;
-
-ArrayList<PVector> fieldOutPointsLeft;
-ArrayList<PVector> fieldOutPointsRight;
 
 ArrayList<Vehicle> vehicles1L;
 ArrayList<Vehicle> vehicles1R;
@@ -37,18 +47,20 @@ float force = 0.0000001;
 int emgState = 0;
 
 void setupEmgVehicles() {
-  noiseSeed(7); // 7 ok, but a bit too noisy on right
-
-  flowfield = new FlowField(resolution); // resolution declared globally
+  noiseSeed(noise1); // 7 ok, but a bit too noisy on right
+  
+  flowfield1 = new FlowField(resolution); // resolution declared globally
   magnet = new ArrayList<Magnet>(); 
-  fieldOutPointsLeft = new ArrayList<PVector>();
-  fieldOutPointsRight = new ArrayList<PVector>();
-
-  flowfield.init();
+  flowfield1.init();
 
   PVector magnetPos = new PVector(PULSECTR.x, 1.25 * PULSECTR.y);
-  flowfield.update(magnetPos);
-
+  flowfield1.update(magnetPos);
+  
+  noiseSeed(noise2); // does this work twice ? 
+  flowfield2 = new FlowField(resolution); // resolution declared globally 
+  flowfield2.init();
+  flowfield2.update(magnetPos);
+  
   vehicles1L = new ArrayList<Vehicle>();
   vehicles1R = new ArrayList<Vehicle>();
   vehicles2L = new ArrayList<Vehicle>();
@@ -86,8 +98,8 @@ void drawEmgVehicles() {
 void drawBigTriangle() {
   String emg1Logic = emgLogic(emg1LeftSensor, emg1RightSensor);
   String emg2Logic = emgLogic(emg2LeftSensor, emg2RightSensor);
-  println("triangle");
-  println(emg1Logic, emg2Logic);
+  //println("triangle");
+  //println(emg1Logic, emg2Logic);
   // draw white triange if 
   if (emg1Logic == "high" && emg2Logic == "high") {
     println("BOTH HIGH!!!!!!!");
@@ -100,23 +112,26 @@ void drawBigTriangle() {
   }
 }
 
-void addEmgVehicles() {
-  float bright1L = map(emg1LeftSensor, 20, 1000, 10, 255);
-  float bright1R = map(emg1RightSensor, 20, 1000, 10, 255);
-  float bright2L = map(emg2LeftSensor, 20, 1000, 10, 25);
-  float bright2R = map(emg2RightSensor, 20, 1000, 10, 255);
+void addEmgVehicles() {  
+  float bright1L = map(emg1LeftSensor, emg1Low, emg1High, emgMapLow, emgMapHigh);
+  float bright1R = map(emg1RightSensor, emg1Low, emg1High, emgMapLow, emgMapHigh);
+  float bright2L = map(emg2LeftSensor, emg2Low, emg2High, emgMapLow, emgMapHigh);
+  float bright2R = map(emg2RightSensor, emg2Low, emg2High, emgMapLow, emgMapHigh);
 
   String emg1Logic = emgLogic(emg1LeftSensor, emg1RightSensor);
   String emg2Logic = emgLogic(emg2LeftSensor, emg2RightSensor);
 
   if (emgState == 5) {
-    makeCrazyLinesLogic(emg1Logic, v1LStart, v1RStart, fieldOutPointsLeft);
-    makeCrazyLinesLogic(emg2Logic, v2LStart, v2RStart, fieldOutPointsRight);
+    makeCrazyLinesLogic(emg1Logic, v1LStart, v1RStart, flowfield1.getOutPointsLeft(), flowfield2.getOutPointsLeft()); // TO DO CHECK THESE!!!!! DOES THIS WORK?????
+    makeCrazyLinesLogic(emg2Logic, v2LStart, v2RStart, flowfield1.getOutPointsRight(), flowfield2.getOutPointsRight());  // TO DO CHECK THESE!!!!! DOES THIS WORK?????
+    
+    //makeCrazyLinesLogic(emg2Logic, v2LStart, v2RStart, fieldOutPointsLeft);
+    //makeCrazyLinesLogic(emg2Logic, v2LStart, v2RStart, fieldOutPointsRight);
   }
 
   //if (emgState == 6) {
   //  //makeBigTriangle();
-  //  println("herer");
+  //  println("here");
   //  v1LStart.x = 0.016455347;
   //  v1LStart.y = 207.82713;
   //  //v1LStart.x = 0.001;
@@ -135,21 +150,21 @@ void addEmgVehicles() {
 }
 
 void runEmgVehicles() {
-  runVehiclesIterator(vehicles1L, v1LStart, "left");
-  runVehiclesIterator(vehicles1R, v1RStart, "left");
-  runVehiclesIterator(vehicles2L, v2LStart, "right");
-  runVehiclesIterator(vehicles2R, v2RStart, "right");
+  runVehiclesIterator(flowfield1, vehicles1L, v1LStart, "left");
+  runVehiclesIterator(flowfield2, vehicles1R, v1RStart, "left");
+  runVehiclesIterator(flowfield1, vehicles2L, v2LStart, "right");
+  runVehiclesIterator(flowfield2, vehicles2R, v2RStart, "right");
 }
 
-void runVehiclesIterator(ArrayList<Vehicle> vehicles, PVector startPos, String side) {
+void runVehiclesIterator(FlowField flowField, ArrayList<Vehicle> vehicles, PVector startPos, String screenSide) {
   if (emgRunning == true) {
     Iterator<Vehicle> it = vehicles.iterator();
     while (it.hasNext()) {
       Vehicle v = it.next();
-      v.follow(flowfield);
+      v.follow(flowField);
       v.run();
       if (v.isDead()) {
-        if (side == "left") {
+        if (screenSide == "left") {
           if (v.position.x > PULSECTR.x) {
             PVector reStart = new PVector(0, random(height));
             startPos.set(reStart);
@@ -158,7 +173,7 @@ void runVehiclesIterator(ArrayList<Vehicle> vehicles, PVector startPos, String s
           }
         }
 
-        if (side == "right") {
+        if (screenSide == "right") {
           if (v.position.x < 0.55 * width) {
             PVector reStart = new PVector(width-1, random(height));
             startPos.set(reStart);
@@ -176,23 +191,36 @@ void runVehiclesIterator(ArrayList<Vehicle> vehicles, PVector startPos, String s
 }
 
 
-void makeCrazyLinesLogic(String logic, PVector startPosL, PVector startPosR, ArrayList<PVector> fieldPtsArray) {
-  int noOutPoints = fieldPtsArray.size();
-  int noPoint = int(random(noOutPoints));
-  PVector newStart = fieldPtsArray.get(noPoint);
+void makeCrazyLinesLogic(String logic, PVector startPosL, PVector startPosR, ArrayList<PVector> fieldPtsArray1, ArrayList<PVector> fieldPtsArray2) {
+  
+  //Choose random point from array of outpoints on ff1 -- correspond to left sensor
+  int noOutPoints1 = fieldPtsArray1.size();
+  int noPoint1 = int(random(noOutPoints1));
+  PVector newStart1 = fieldPtsArray1.get(noPoint1);
+  
+  
+  //Choose random point from array of outpoints on ff2 -- correspond to right sensor
+  int noOutPoints2 = fieldPtsArray2.size();
+  int noPoint2 = int(random(noOutPoints2));
+  PVector newStart2 = fieldPtsArray2.get(noPoint2);
+  
 
   if (logic == "high") {
-    startPosL.x = newStart.x;
+    // if L/R sensors are both high, make them both crazy lines
+    startPosL.x = newStart1.x;
     startPosL.y = height;
-    startPosR.x = newStart.x;
+    startPosR.x = newStart2.x;
     startPosR.y = height;
-  } else if (logic == "left high") {  
-    startPosL.x = newStart.x;
+  } else if (logic == "left high") {
+    // if the left is high, turn just the right into a crazy line
+    startPosL.x = newStart1.x;
     startPosL.y = height;
   } else if (logic == "right high") {
-    startPosR.x = newStart.x;
+    // if the right is high, turn just the right into a crazy line
+    startPosR.x = newStart2.x;
     startPosR.y = height;
   } else if (logic == "low") {
+    // if both are L/R sensors are low, keep moving and keep in vertical center 
     float yOff = 0.1 * height;
     startPosL.y = height/2 + random(-yOff, yOff);
     startPosR.y = height/2 + random(-yOff, yOff);
@@ -206,15 +234,18 @@ void debugFrameRate() {
   fill(255, 0, 0);
   rect(0, 0, 100, 100);
   fill(255);
-  text(floor(frameRate), 10, 40);
-  text(floor(vehicles1L.size()), 10, 60);
-  text(floor(vehicles1R.size()), 10, 80);
-  text(floor(vehicles2L.size()), 10, 100);
-  text(floor(vehicles2R.size()), 10, 120);
+  //text(floor(frameRate), 10, 40);
+  text(noise1, 10, 40);
+  text(noise2, 10, 60);
+  //text(floor(vehicles1L.size()), 10, 60);
+  //text(floor(vehicles1R.size()), 10, 80);
+  //text(floor(vehicles2L.size()), 10, 100);
+  //text(floor(vehicles2R.size()), 10, 120);
 }
 
 void debugFlowField() {
-  flowfield.display();
+  flowfield1.display();
+  flowfield2.display();
 
   Iterator<Magnet> it = magnet.iterator();
   while (it.hasNext()) {

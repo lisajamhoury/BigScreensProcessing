@@ -4,6 +4,10 @@ class FlowField {
   int rows;
   int horMid;
   PVector[][] field;
+  ArrayList<PVector> outPointsLeft;
+  ArrayList<PVector> outPointsRight;
+  color debugClr;
+  int debugOffset;
   
   FlowField(int r) {
     resolution = r;
@@ -11,6 +15,10 @@ class FlowField {
     rows = height / resolution;
     horMid = cols/2;
     field = new PVector[cols][rows];
+    outPointsLeft = new ArrayList<PVector>();
+    outPointsRight = new ArrayList<PVector>();
+    debugClr = color(random(255), random(255), random(255));
+    debugOffset = floor(random(20));
   }
 
   void update(PVector iLoc) {
@@ -19,7 +27,8 @@ class FlowField {
   }
 
   void add(PVector iLoc) {
-    magnet.add(new Magnet(new PVector(iLoc.x-250, iLoc.y), new PVector(iLoc.x + 250, iLoc.y)));
+    //magnet.add(new Magnet(new PVector(iLoc.x-250, iLoc.y), new PVector(iLoc.x + 250, iLoc.y)));
+    magnet.add(new Magnet(new PVector(iLoc.x, iLoc.y), new PVector(iLoc.x, iLoc.y)));
   }
 
   void init() {
@@ -66,7 +75,7 @@ class FlowField {
 
       }
     }
-    getOutPoints();
+    initOutPoints();
 
   }
 
@@ -84,7 +93,15 @@ class FlowField {
     return field[column][row].copy();
   }
   
-  void getOutPoints() {
+  ArrayList<PVector> getOutPointsLeft() {
+   return outPointsLeft; 
+  }
+  
+  ArrayList<PVector> getOutPointsRight() {
+   return outPointsRight; 
+  }
+  
+  void initOutPoints() {
    println("get points");
    int[] rowsToCheck = new int[2];
    rowsToCheck[0] = rows-2;
@@ -96,17 +113,21 @@ class FlowField {
         float heading = getHeading(field[x][y]);
         if (( x < cols/2) && (heading > 0.2 &&heading < 1.4)) {
           PVector outPointL = new PVector(x*resolution, y*resolution);
-          fieldOutPointsLeft.add(outPointL);
+          outPointsLeft.add(outPointL);
           //USE TO DEBUG OUT POINTS
-          //fill(255,0,0);
-          //ellipse(outPointL.x, outPointL.y, 10, 10);
+          if (debugOutPoints == true) {
+            fill(debugClr, 150);
+            ellipse(outPointL.x+debugOffset, outPointL.y, 10, 10);
+          }
         }
         if (( x > cols/2) && (heading > 1.7 && heading < 2.8)) {
           PVector outPointR = new PVector(x*resolution, y*resolution);
-          fieldOutPointsRight.add(outPointR);
+          outPointsRight.add(outPointR);
+          if (debugOutPoints == true) {
           //USE TO DEBUG OUT POINTS
-          //fill(255,0,0);
-          //ellipse(outPointR.x, outPointR.y, 10, 10);
+            fill(debugClr, 150);
+            ellipse(outPointR.x+debugOffset, outPointR.y, 10, 10);
+          }
         }
       }     
      }
@@ -123,7 +144,7 @@ class FlowField {
     float arrowsize = 4;
     // Translate to location to render vector
     translate(x, y);
-    stroke(100);
+    stroke(debugClr);
     // Call vector heading function to get direction (note that pointing to the right is a heading of 0) and rotate
     rotate(v.heading());
     // Calculate length of vector & scale it to be bigger or smaller if necessary

@@ -29,8 +29,8 @@ void setupProcessData() {
 void getSensorData() { 
  emg1LeftSensor = emg1L;
  emg1RightSensor = emg1R;
- emg2LeftSensor = emg2L;
- emg2RightSensor = emg2R;
+ emg2LeftSensor = emg2L; // fix me 
+ emg2RightSensor = emg2R; // fix me ;
  pulseSensor = polar0;
  
  calculateBpm();
@@ -53,15 +53,13 @@ void calculateBpm() {
 }
 
 
-
-
 // Get logic from left and right emg sensors
 // TODO  delete all color data? 
 String emgLogic(float leftSensor, float rightSensor) {
   String status = "neutral";
   //color clr = color(255,255,255);
   
-  if (leftSensor > 900 && rightSensor > 900) {
+  if (leftSensor > 900 && rightSensor > 900) { // 950 instead of 900?
     status = "high";
     //clr = color(255,0,0);
     // red
@@ -73,7 +71,7 @@ String emgLogic(float leftSensor, float rightSensor) {
     //clr = color(0,255,0);
   } else if (rightSensor > 900) { 
     status = "right high";
-  } else if (leftSensor < 300 && rightSensor < 300) {
+  } else if (leftSensor < 90 && rightSensor < 90) { // was 300
     status = "low";
     // blue 
     //bright = 20;
