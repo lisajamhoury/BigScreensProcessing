@@ -14,10 +14,10 @@ boolean debugFlowField = false;
 boolean debugOutPoints = false;
 
 //Set top and bottom for EMG sensors 
-int emg1Low = 100;
-int emg1High = 1000;
-int emg2Low = 100;
-int emg2High = 1000;
+//int emg1Low = 100;
+//int emg1High = 1000;
+//int emg2Low = 100;
+//int emg2High = 1000;
 int emgMapLow = 100;
 int emgMapHigh = 255;
 
@@ -113,10 +113,10 @@ void drawBigTriangle() {
 }
 
 void addEmgVehicles() {  
-  float bright1L = map(emg1LeftSensor, emg1Low, emg1High, emgMapLow, emgMapHigh);
-  float bright1R = map(emg1RightSensor, emg1Low, emg1High, emgMapLow, emgMapHigh);
-  float bright2L = map(emg2LeftSensor, emg2Low, emg2High, emgMapLow, emgMapHigh);
-  float bright2R = map(emg2RightSensor, emg2Low, emg2High, emgMapLow, emgMapHigh);
+  float bright1L = map(emg1LeftSensor, 0, 1000, emgMapLow, emgMapHigh);
+  float bright1R = map(emg1RightSensor, 0, 1000, emgMapLow, emgMapHigh);
+  float bright2L = map(emg2LeftSensor, 0, 1000, emgMapLow, emgMapHigh);
+  float bright2R = map(emg2RightSensor, 0, 1000, emgMapLow, emgMapHigh);
 
   String emg1Logic = emgLogic(emg1LeftSensor, emg1RightSensor);
   String emg2Logic = emgLogic(emg2LeftSensor, emg2RightSensor);

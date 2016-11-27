@@ -7,8 +7,10 @@ float emg2LeftSensor = 0;
 float emg2RightSensor = 0;
 
 //Constants for mapping data 
-float EMGLOWER = 20;
-float EMGUPPER = 1000;
+int EMG1LOWER = 20;
+int EMG1UPPER = 400;
+int EMG2LOWER = 20;
+int EMG2UPPER = 400;
 
 //Pulse bpm timing
 int pulseTimeCtr; // count time elapsed since last calculation
@@ -27,13 +29,27 @@ void setupProcessData() {
 }
 
 void getSensorData() { 
- emg1LeftSensor = emg1L;
+ emg1LeftSensor = mapEmgData(emg1L, EMG1LOWER, EMG1UPPER);
  emg1RightSensor = emg1R;
  emg2LeftSensor = emg2L; // fix me 
  emg2RightSensor = emg2R; // fix me ;
  pulseSensor = polar0;
  
  calculateBpm();
+}
+
+
+float mapEmgData(float sensorReading, int lowerBound, int upperBound) {
+  if (sensorReading < lowerBound) {
+    sensorReading = lowerBound;
+  }
+  
+  if (sensorReading > upperBound) {
+    sensorReading = upperBound;
+  }
+  
+  sensorReading = map(sensorReading, lowerBound, upperBound, 0, 1000);
+  return sensorReading;   
 }
 
 
@@ -53,34 +69,23 @@ void calculateBpm() {
 }
 
 
+
+
 // Get logic from left and right emg sensors
 // TODO  delete all color data? 
 String emgLogic(float leftSensor, float rightSensor) {
   String status = "neutral";
-  //color clr = color(255,255,255);
-  
+    
   if (leftSensor > 900 && rightSensor > 900) { // 950 instead of 900?
     status = "high";
-    //clr = color(255,0,0);
-    // red
-    //bright = 255;
   } else if (leftSensor > 900) {
     status = "left high";
-    // green
-    //bright = 200;
-    //clr = color(0,255,0);
   } else if (rightSensor > 900) { 
     status = "right high";
   } else if (leftSensor < 90 && rightSensor < 90) { // was 300
     status = "low";
-    // blue 
-    //bright = 20;
-    //clr = color(0,0,255);
   } else if (abs(leftSensor - rightSensor) <=100) {
     status = "close";
-    //white
-    //bright = 100;
-    //clr = color(255,255,255);
   } 
  
  return status;
