@@ -8,9 +8,9 @@ float emg2RightSensor = 0;
 
 //Constants for mapping data 
 int EMG1LOWER = 20;
-int EMG1UPPER = 400;
+int EMG1UPPER = 300; // reset high !!
 int EMG2LOWER = 20;
-int EMG2UPPER = 400;
+int EMG2UPPER = 300; // reset high !!
 
 //Pulse bpm timing
 int pulseTimeCtr; // count time elapsed since last calculation
@@ -30,9 +30,9 @@ void setupProcessData() {
 
 void getSensorData() { 
  emg1LeftSensor = mapEmgData(emg1L, EMG1LOWER, EMG1UPPER);
- emg1RightSensor = emg1R;
- emg2LeftSensor = emg2L; // fix me 
- emg2RightSensor = emg2R; // fix me ;
+ emg1RightSensor = mapEmgData(emg1R, EMG1LOWER, EMG1UPPER);
+ emg2LeftSensor = mapEmgData(emg2L, EMG2LOWER, EMG2UPPER); 
+ emg2RightSensor = mapEmgData(emg2R, EMG2LOWER, EMG2UPPER);
  pulseSensor = polar0;
  
  calculateBpm();
@@ -72,7 +72,6 @@ void calculateBpm() {
 
 
 // Get logic from left and right emg sensors
-// TODO  delete all color data? 
 String emgLogic(float leftSensor, float rightSensor) {
   String status = "neutral";
     

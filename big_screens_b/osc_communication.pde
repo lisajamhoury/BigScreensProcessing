@@ -33,7 +33,7 @@ void oscEvent(OscMessage theOscMessage) {
   }
   
   //print the data
-  println("polar: " + polar0);
-  println("emg1: " + emg1L + ", " + emg1R);
-  println("emg2: " + emg2L + ", " + emg2R);
+  //println("polar: " + polar0);
+  //println("emg1: " + emg1L + ", " + emg1R);
+  //println("emg2: " + emg2L + ", " + emg2R);
 }

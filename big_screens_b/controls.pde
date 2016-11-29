@@ -158,17 +158,32 @@ void keyPressed() {
       println("d");
       minSpeed-= 0.00000001;
     }
-    
-    if (keyCode == LEFT) {
-     println("enter");
-     drawBigTriangle();
-
-    }
   }
 }
 
-void runControls() {
+boolean sloMo = false;
+float currentMinSpeed = 0;
 
+void keyReleased() {
+ if (key == 's') {
+   if (sloMo == true) {
+     sloMo = false;
+     minSpeed = currentMinSpeed;
+   }
+ }
+}
+
+void runControls() {
+    if (keyPressed == true) {
+    //slow mo
+    if (key == 's') {
+      if (sloMo == false) {
+        currentMinSpeed = minSpeed;
+        sloMo = true;
+      }
+      minSpeed = 0.0000000; // slow mo 
+    } // return the min speed to the prev speed 
+  }
 
   // TO DO -- ADD LABELS TO THESE
   if (emg1 == true) {
@@ -234,7 +249,7 @@ void runControls() {
 
       drawMultiPulse();
     }
-  }
+  } 
 }
 
 

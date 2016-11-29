@@ -98,11 +98,15 @@ void drawEmgVehicles() {
 void drawBigTriangle() {
   String emg1Logic = emgLogic(emg1LeftSensor, emg1RightSensor);
   String emg2Logic = emgLogic(emg2LeftSensor, emg2RightSensor);
-  //println("triangle");
-  //println(emg1Logic, emg2Logic);
-  // draw white triange if 
+  // draw white triange if logic is both high
   if (emg1Logic == "high" && emg2Logic == "high") {
     println("BOTH HIGH!!!!!!!");
+    //float newX = random(resolution);
+    //float newY = (0.95 * height) + (random(resolution));
+    //float newX = 1;
+    //float newY = height-1;
+    //v1LStart.x = newX; 
+    //v1LStart.y = newY;
     fill(255);  
     beginShape();
     vertex(0, height);
@@ -235,8 +239,10 @@ void debugFrameRate() {
   rect(0, 0, 100, 100);
   fill(255);
   //text(floor(frameRate), 10, 40);
+  // ff noise debug
   text(noise1, 10, 40);
   text(noise2, 10, 60);
+  //vehicle array size debug
   //text(floor(vehicles1L.size()), 10, 60);
   //text(floor(vehicles1R.size()), 10, 80);
   //text(floor(vehicles2L.size()), 10, 100);
