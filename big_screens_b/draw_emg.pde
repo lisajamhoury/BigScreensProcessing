@@ -147,10 +147,10 @@ void addEmgVehicles() {
 
   //}
 
-  vehicles1L.add(new Vehicle(emg1Logic, bright1L, v1LStart.x, v1LStart.y, random(AREA*minSpeed, AREA*maxSpeed), random(AREA*force)));
-  vehicles1R.add(new Vehicle(emg1Logic, bright1R, v1RStart.x, v1RStart.y, random(AREA*minSpeed, AREA*maxSpeed), random(AREA*force)));
-  vehicles2L.add(new Vehicle(emg2Logic, bright2L, v2LStart.x, v2LStart.y, random(AREA*minSpeed, AREA*maxSpeed), random(AREA*force)));
-  vehicles2R.add(new Vehicle(emg2Logic, bright2R, v2RStart.x, v2RStart.y, random(AREA*minSpeed, AREA*maxSpeed), random(AREA*force)));
+  vehicles1L.add(new Vehicle(emg1Logic, bright1L, emgState, v1LStart.x, v1LStart.y, random(AREA*minSpeed, AREA*maxSpeed), random(AREA*force)));
+  vehicles1R.add(new Vehicle(emg1Logic, bright1R, emgState, v1RStart.x, v1RStart.y, random(AREA*minSpeed, AREA*maxSpeed), random(AREA*force)));
+  vehicles2L.add(new Vehicle(emg2Logic, bright2L, emgState, v2LStart.x, v2LStart.y, random(AREA*minSpeed, AREA*maxSpeed), random(AREA*force)));
+  vehicles2R.add(new Vehicle(emg2Logic, bright2R, emgState, v2RStart.x, v2RStart.y, random(AREA*minSpeed, AREA*maxSpeed), random(AREA*force)));
 }
 
 void runEmgVehicles() {

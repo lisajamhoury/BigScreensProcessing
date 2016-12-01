@@ -12,11 +12,13 @@ class Vehicle {
   ArrayList<PVector> prevPositions;
   boolean wrapping = false;
   String vLogic;
+  int vEmgState;
+  
   
 
   PVector prevPos;
 
-  Vehicle(String iLogic, float iBright, float x, float y, float ms, float mf) {
+  Vehicle(String iLogic, float iBright, int state, float x, float y, float ms, float mf) {
     position = new PVector(x, y);
     acceleration = new PVector(0, 0);
     velocity = new PVector(0, 0);
@@ -24,7 +26,8 @@ class Vehicle {
     maxspeed = ms;
     maxforce = mf;
     vBright = iBright;
-    vLogic = iLogic; 
+    vLogic = iLogic;
+    vEmgState = state;
     //clr = iClr;
 
     prevPositions = new ArrayList<PVector>();  
@@ -93,33 +96,40 @@ class Vehicle {
     //float theta = velocity.heading() + PI/2;
     colorMode(HSB); // Change color for brightness
    
-    if (emgState == 1) {
+    if (vEmgState == 1) {
       //only draw flow lines
       justFlow();
     }
    
-    if (emgState == 2) {
+    if (vEmgState == 2) {
       // draw flow and draw wrapping lines if both sensors are high;
       flowAndHighWrapping();
     }
     
-    if (emgState == 3) {
+    if (vEmgState == 3) {
       flowAndWrapping();
     }
     
     // DOESN'T CURRENTLY INCLUDE SENSOR DATA -- add data as speed!
-    if (emgState == 4) {
+    if (vEmgState == 4) {
      allWhite(); 
     }
     
-    if (emgState == 5) {
+    if (vEmgState == 5) {
      justLines();
     }
     
     // using this now to draw triangle
-    if (emgState == 6) {
+    if (vEmgState == 6) {
      justLines();
     }
+
+    // fade all out
+    if (vEmgState == 7) {
+      stroke(0, 0, 0, 0);
+      fill(0, 0, 0, 0);
+    }
+
 
     //strokeWeight(lineStk);
     strokeWeight(lineStk);
@@ -148,7 +158,7 @@ class Vehicle {
 
   void flowAndHighWrapping() {
     if (wrapping == true && vLogic == "high") {
-      println("true");
+      //println("true");
       stroke(0, 0, vBright);
       fill(0, 0, vBright);
     } else if (wrapping == false) {
@@ -180,14 +190,7 @@ class Vehicle {
     }
   }
 
-
   boolean isDead() {
-    //if (position.x < -r) return true;
-    //if (position.y < -r) return true;
-    //if (position.x > width+r) return true;
-    //if (position.y > height+r) return true;
-
-
     if (lifespan < 0) {
       return true;
     } else {

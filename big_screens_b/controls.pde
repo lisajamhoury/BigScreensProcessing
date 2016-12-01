@@ -4,6 +4,7 @@ boolean emg3 = false;
 boolean emg4 = false;
 boolean emg5 = false;
 boolean emg6 = false;
+boolean emg7 = true;
 boolean pulse1 = false;
 boolean pulse2 = false;
 boolean pulse3 = false; 
@@ -100,6 +101,7 @@ void keyPressed() {
     emg4 = false;
     emg5 = false;
     emg6 = false;
+    emg7 = true;
   }
 
 
@@ -210,6 +212,12 @@ void runControls() {
 
   if (emg6 == true) {
     drawBigTriangle();
+  }
+  
+  if (emg7 == true) {
+    drawEmgVehicles();
+    emgRunning = true;
+    emgState = 7;
   }
 
   // start pulses, draw pulses
