@@ -17,6 +17,15 @@ int pulseBoundY = 2; //starting y boundaries
 float pulseRectHeight = 0.01 * height;  // 0.0006 * width; 
 float ctrPosLocY;
 
+// variables to time removal of pulses 
+boolean removePulsesSet = false;
+int pulsesToRemove = 0;
+int removePulseTime = 0;
+int removeTotalTime = 8000; // remove time in millis
+int removeRate = 100; // remove every 100 millis
+float removeIncs = removeTotalTime/removeRate; // number of times to remove at given rate
+float removeEachInc;
+
 boolean animate = false;
 
 
@@ -86,7 +95,10 @@ void drawMultiPulse(){
       PVector pulseLoc = getPulseLocation();
       // check to make sure you have a bpm
       if (currentBpm > 0) { 
-        multiPulses.add(new PulseMarker(pulseLoc));
+        //for (int i = 0; i < 20; i++) {
+          //pulseLoc = getPulseLocation();
+          multiPulses.add(new PulseMarker(pulseLoc));
+        //} // use for debugging
       }
     }
   }
@@ -98,10 +110,26 @@ void drawMultiPulse(){
  
  //If pulse array is shrinking -- remove pulses in order they were drawn 
  if (growing == false) {
-   if (multiPulses.size() > 0) {
+   if (removePulsesSet == false) {
+     pulsesToRemove = multiPulses.size();  
+     removePulseTime = millis();
+     removeEachInc = pulsesToRemove / removeIncs;
+     removePulsesSet = true;
+   }
+      
+   if (millis() > removePulseTime + removeRate) {
+     if (multiPulses.size() > removeEachInc) { 
+       for (int i = 0; i < removeEachInc; i++) {
+         int pos = multiPulses.size() - 1;
+         multiPulses.remove(pos);
+       }
+     } else if (multiPulses.size() > 0) {
       int pos = multiPulses.size() - 1;
       multiPulses.remove(pos);
-    }
+    }  
+   removePulseTime = millis();
+ }
+   
  } // growing false 
    
  // Draw pulse if true, otherwise, just keep count   
@@ -110,6 +138,7 @@ void drawMultiPulse(){
  }
 
 }
+
 
 void runMultiPulse() {
   if (multiPulses.size() == 0) {
