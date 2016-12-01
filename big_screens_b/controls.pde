@@ -8,6 +8,10 @@ boolean pulse1 = false;
 boolean pulse2 = false;
 boolean pulse3 = false; 
 
+boolean fadePulsesUp = false;
+boolean fadePulsesDown = false;
+
+boolean pulseTimerStarted = false;
 
 
 void keyPressed() {
@@ -51,10 +55,6 @@ void keyPressed() {
       
       return;
     }
-    //if (emg3 == true) {
-    //  emg3 = false; 
-    //  return;
-    //}
   }
 
   if (key == '4') {
@@ -66,10 +66,7 @@ void keyPressed() {
       emg5 = false; 
       return;
     }
-    //if (emg4 == true) {
-    //  emg4 = false; 
-    //  return;
-    //}
+
   }
 
   if (key == '5') {
@@ -81,11 +78,7 @@ void keyPressed() {
       emg5 = true; 
       return;
     }
-    //if (emg5 == true) {
-      
-    //  emg5 = false; 
-    //  return;
-    //}
+
   }
 
   if (key == '6') {
@@ -112,40 +105,37 @@ void keyPressed() {
 
   // show hide pulse -- growing
   if (key == '7') {
-    if (pulse1 == false) {
-      pulse1 = true; 
-      return;
-    }
-    if (pulse1 == true) {
-      pulse1 = false; 
-      return;
-    }
+    pulse1 = true;
+    pulse2 = false;
+    pulse3 = false;
+  }
+  
+  if (key == '8') {
+    pulse1 = false;
+    pulse2 = true;
+    pulse3 = false;
+    
+    
   }
 
   // animate 
-  if (key == '8') { 
-    if (animate == false) {
-      animate = true; 
-      return;
-    }
-    if (animate == true) {
-      animate = false; 
-      return;
-    }
-  }
+  //if (key == '8') { 
+  //  if (animate == false) {
+  //    animate = true; 
+  //    return;
+  //  }
+  //  if (animate == true) {
+  //    animate = false; 
+  //    return;
+  //  }
+  //}
 
-  // stop from growing / toggle growing pulse
+  // stop from growing / toggle growing/shrinking pulse
   if (key == '9') {
-    if (pulse2 == false) {
-      pulse2 = true; 
-      pulse1 = false;
-      return;
-    }
-    if (pulse2 == true) {
-      pulse2 = false;
-      pulse1 = true;
-      return;
-    }
+    pulse1 = false;
+    pulse2 = false;
+    pulse3 = true;
+    
   }
 
   if (key == CODED) {
@@ -165,6 +155,7 @@ boolean sloMo = false;
 float currentMinSpeed = 0;
 
 void keyReleased() {
+ // reset emg vehicle speed after slomo 
  if (key == 's') {
    if (sloMo == true) {
      sloMo = false;
@@ -181,7 +172,7 @@ void runControls() {
         currentMinSpeed = minSpeed;
         sloMo = true;
       }
-      minSpeed = 0.0000000; // slow mo 
+      minSpeed = 0.0; // slow mo 0.00000001 
     } // return the min speed to the prev speed 
   }
 
@@ -221,11 +212,22 @@ void runControls() {
     drawBigTriangle();
   }
 
+  // start pulses, draw pulses
   if (pulse1 == true) {
+    if (fadePulsesDown == true) {
+      fadePulsesUp = true;
+      fadePulsesDown = false;
+    }
+    
     drawPulse = true;
-    if (currentBpm > 10) {
+    
+    // if there's a bpm and it's not growing, 
+    // start the bpm timer, start growing and start expanding bounds on screen, and drawpulse  
+    if (currentBpm > 10 || pulseTimerStarted == true) {
       if (!growing) {
         //begin timer
+        pulseTimerStarted = true;
+        println("timer started");
         pulseStartTime = millis();
         pulseIncTimeX = pulseStartTime;
         pulseIncTimeY = pulseStartTime;
@@ -233,24 +235,43 @@ void runControls() {
       growing = true;
 
       expandPulseBounds();
-      //noBoundExpansion();
 
       drawMultiPulse();
+    } else {
+      // debugging 
+      println("nope", currentBpm);
     }
   }
 
+  // hide pulses
   if (pulse2 == true) {
-    drawPulse = true;
-    if (currentBpm > 10) {
-      growing = false;
+    fadePulsesDown = true;
+    growing = true;
+    expandPulseBounds();
+    drawMultiPulse();
+  }
 
-      expandPulseBounds();
+  // remove pulses 
+  if (pulse3 == true) {
+    if (fadePulsesDown == true) {
+      fadePulsesUp = true;
+      fadePulsesDown = false;
+    }
+    
+    drawPulse = true;
+    //if (currentBpm > 10) {
+    growing = false;
+
+    expandPulseBounds();
       //noBoundExpansion();
 
-      drawMultiPulse();
-    }
-  } 
-}
+    drawMultiPulse();
+    //}
+  }
+  
+
+  
+} // Close run controls
 
 
   //boolean toggleKey(boolean scene) {

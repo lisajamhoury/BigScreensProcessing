@@ -96,38 +96,59 @@ void drawMultiPulse(){
   }
  } //growing true
  
- //If pulse array is shrinking -- remove on pulse 
+ //If pulse array is shrinking -- remove pulses in order they were drawn 
  if (growing == false) {
-   if (pulseSensor == 1  && beat == false) {
-     beat = true;
-     if (multiPulses.size() > 1) {
-        int pos = multiPulses.size() - 1;
-        multiPulses.remove(pos);
-        pos = multiPulses.size() - 1;
-        multiPulses.remove(pos);
-    } else if (multiPulses.size() > 0) {
-        int pos = multiPulses.size() - 1;
-        multiPulses.remove(pos);
+   if (multiPulses.size() > 0) {
+      int pos = multiPulses.size() - 1;
+      multiPulses.remove(pos);
     }
-   }
-  if ( pulseSensor == 0 && beat == true ) {
-   beat = false;
-  }
  } // growing false 
    
- // Draw pulse is true, otherwise, just keep count   
+ // Draw pulse if true, otherwise, just keep count   
  if (drawPulse == true) {
    runMultiPulse();
  }
 
 }
 
-void runMultiPulse() {  
-  if (multiPulses.size() > 0) {
-    for (int i = 0; i < multiPulses.size(); i++) {
-     multiPulses.get(i).run();
-    }
+void runMultiPulse() {
+  if (multiPulses.size() == 0) {
+    return;
   }
+  
+  boolean allPulsesFaded = true;
+    
+  for (int i = 0; i < multiPulses.size(); i++) {
+   
+    if (fadePulsesUp == true) {
+     multiPulses.get(i).fadeColorUp();
+     
+     //check if each pulse has finished fading
+     if (multiPulses.get(i).getFadeStatus() == false) {
+       allPulsesFaded = false;
+     }
+   }
+    
+   if (fadePulsesDown == true) {
+     multiPulses.get(i).fadeColorDown();
+     //check if each pulse has finished fading 
+     if (multiPulses.get(i).getFadeStatus() == false) {
+       allPulsesFaded = false;
+     }
+     
+   }
+   multiPulses.get(i).run();
+  }
+  
+  if (fadePulsesUp == true && allPulsesFaded == true) {
+    fadePulsesUp = false;
+  }
+  
+  if (fadePulsesDown == true && allPulsesFaded == true) {
+    drawPulse = false;
+  }
+  
+    
 }
 
 

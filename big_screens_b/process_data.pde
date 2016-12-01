@@ -7,15 +7,18 @@ float emg2LeftSensor = 0;
 float emg2RightSensor = 0;
 
 //Constants for mapping data 
-int EMG1LOWER = 20;
-int EMG1UPPER = 300; // reset high !!
-int EMG2LOWER = 20;
-int EMG2UPPER = 300; // reset high !!
+int EMG1LOWER = 10;
+int EMG1UPPER = 600; // reset high !!
+int EMG2LOWER = 10;
+int EMG2UPPER = 600; // reset high !!
+
+int LOWBPM = 30; // reset for perfomer!!
+int HIGHBPM = 120; // reset for perfomer!!
 
 //Pulse bpm timing
 int pulseTimeCtr; // count time elapsed since last calculation
 int pulseCtr = 0; // count number of pulses
-int BPMTIMESPAN = 5000;
+int BPMTIMESPAN = 5000; // take bpm every 5 seconds 
 int ONEMINUTE = 60000;
 int lastPulseSensorVal;
 int currentBpm;
