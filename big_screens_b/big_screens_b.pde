@@ -6,10 +6,12 @@ void setup() {
   //size(2880, 270, P3D);
   //size(1920, 180, P3D); //Aaron's projector 
   //size(1440, 135, P3D);
+  surface.setLocation(0,0);
+  
   background(0);
   smooth(4);
-  //noCursor();
-
+  noCursor();
+  
   setupOsc();
   setupGlobals();
   setupProcessData();
