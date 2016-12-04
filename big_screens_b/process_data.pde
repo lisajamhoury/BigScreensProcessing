@@ -23,9 +23,11 @@ int ONEMINUTE = 60000;
 int lastPulseSensorVal;
 int currentBpm;
 
-
 //pulse vairables
 boolean pulse = false;
+
+//incoming key press to char 
+char inKeyChar;
 
 void setupProcessData() {
   pulseTimeCtr = millis();
@@ -39,6 +41,10 @@ void getSensorData() {
  pulseSensor = polar0;
  
  calculateBpm();
+ 
+ // change incoming key from int to char
+ inKeyChar = char(inKey);
+ //println(inKeyChar);
 }
 
 
@@ -70,9 +76,6 @@ void calculateBpm() {
  }
  lastPulseSensorVal = pulseSensor;
 }
-
-
-
 
 // Get logic from left and right emg sensors
 String emgLogic(float leftSensor, float rightSensor) {

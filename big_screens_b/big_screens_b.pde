@@ -13,14 +13,17 @@ void setup() {
   setupOsc();
   setupGlobals();
   setupProcessData();
+  
   setupDrawSensors(); // collected in draw emg
 }
 
 void draw() {
   background(0);
   getSensorData();
+  processControls();
   runControls();
   
+  //println(sloMo, inKeyChar);
   //debug bpm
   //println(currentBpm);
   

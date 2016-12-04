@@ -8,6 +8,9 @@ int listeningPort = 6001;
 int polar0;
 int emg1L, emg1R, emg2L, emg2R;
 
+//variables for receiving key codes 
+int inKey;
+
 //variables for osc communication
 OscP5 oscP5;
 NetAddress host;
@@ -30,10 +33,16 @@ void oscEvent(OscMessage theOscMessage) {
   } else if (theOscMessage.checkAddrPattern("/emg2")) {
     emg2L = theOscMessage.get(0).intValue();
     emg2R = theOscMessage.get(1).intValue();
+  } else if (theOscMessage.checkAddrPattern("/key")) {
+    inKey = theOscMessage.get(0).intValue();
   }
   
   //print the data
   //println("polar: " + polar0);
   //println("emg1: " + emg1L + ", " + emg1R);
   //println("emg2: " + emg2L + ", " + emg2R);
+  
+  //print incoming key code
+  //println(inKey);
+  //println(char(inKey));
 }

@@ -14,9 +14,13 @@ boolean fadePulsesDown = false;
 
 boolean pulseTimerStarted = false;
 
+boolean sloMo = false;
+float currentMinSpeed = 0;
 
-void keyPressed() {
-  if (key == '1') {
+
+
+void processControls() {
+  if (inKeyChar == '1') {
     if (emg1 == false) {
       emg1 = true; 
       emg2 = false;
@@ -31,7 +35,7 @@ void keyPressed() {
     //}
   }
 
-  if (key == '2') {
+  if (inKeyChar == '2') {
     if (emg2 == false) {
       emg1 = false; 
       emg2 = true;
@@ -46,7 +50,7 @@ void keyPressed() {
     //}
   }
 
-  if (key == '3') {
+  if (inKeyChar == '3') {
     if (emg3 == false) {
       emg1 = false; 
       emg2 = false;
@@ -58,7 +62,7 @@ void keyPressed() {
     }
   }
 
-  if (key == '4') {
+  if (inKeyChar == '4') {
     if (emg4 == false) {
       emg1 = false; 
       emg2 = false;
@@ -70,7 +74,7 @@ void keyPressed() {
 
   }
 
-  if (key == '5') {
+  if (inKeyChar == '5') {
     if (emg5 == false) {
       emg1 = false;
       emg2 = false;
@@ -82,7 +86,7 @@ void keyPressed() {
 
   }
 
-  if (key == '6') {
+  if (inKeyChar == '6') {
     if (emg6 == false) {
       emg6 = true; 
       return;
@@ -94,7 +98,7 @@ void keyPressed() {
   }
   
   // turn emg off entirely
-  if (key == '0') {
+  if (inKeyChar == '0') {
     emg1 = false;
     emg2 = false;
     emg3 = false;
@@ -106,13 +110,13 @@ void keyPressed() {
 
 
   // show hide pulse -- growing
-  if (key == '7') {
+  if (inKeyChar == '7') {
     pulse1 = true;
     pulse2 = false;
     pulse3 = false;
   }
   
-  if (key == '8') {
+  if (inKeyChar == '8') {
     pulse1 = false;
     pulse2 = true;
     pulse3 = false;
@@ -133,50 +137,44 @@ void keyPressed() {
   //}
 
   // stop from growing / toggle growing/shrinking pulse
-  if (key == '9') {
+  if (inKeyChar == '9') {
     pulse1 = false;
     pulse2 = false;
     pulse3 = true;
     
   }
 
-  if (key == CODED) {
-    if (keyCode == UP) {
-      println("u");
-      minSpeed+= 0.00000001;
-    }
-
-    if (keyCode == DOWN) {
-      println("d");
-      minSpeed-= 0.00000001;
-    }
+  //increase vehicle speed
+  if (inKeyChar == 'p') {
+    minSpeed+= 0.00000001;
   }
-}
 
-boolean sloMo = false;
-float currentMinSpeed = 0;
-
-void keyReleased() {
- // reset emg vehicle speed after slomo 
- if (key == 's') {
+  //decrease vehicle speed
+  if (inKeyChar == 'l') {
+    minSpeed-= 0.00000001; 
+  }
+  
+  //slow mo on
+  if (inKeyChar == 's') {
+    if (sloMo == false) {
+      currentMinSpeed = minSpeed;
+      sloMo = true;
+     }
+     minSpeed = 0.0; // slow mo 
+    } // return the min speed to the prev speed 
+  
+  // reset emg vehicle speed after slomo 
+  if (inKeyChar == 'd') {
    if (sloMo == true) {
      sloMo = false;
      minSpeed = currentMinSpeed;
    }
  }
+  
 }
 
+
 void runControls() {
-    if (keyPressed == true) {
-    //slow mo
-    if (key == 's') {
-      if (sloMo == false) {
-        currentMinSpeed = minSpeed;
-        sloMo = true;
-      }
-      minSpeed = 0.0; // slow mo 0.00000001 
-    } // return the min speed to the prev speed 
-  }
 
   // TO DO -- ADD LABELS TO THESE
   if (emg1 == true) {
