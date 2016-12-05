@@ -9,7 +9,7 @@ void setupDrawSensors() {
 import java.util.Iterator;
 
 //DEBUG
-boolean debugFrameRate = false;
+boolean debugFrameRate = true;
 boolean debugFlowField = false;
 boolean debugOutPoints = false;
 
@@ -207,7 +207,6 @@ void makeCrazyLinesLogic(String logic, PVector startPosL, PVector startPosR, Arr
   int noOutPoints2 = fieldPtsArray2.size();
   int noPoint2 = int(random(noOutPoints2));
   PVector newStart2 = fieldPtsArray2.get(noPoint2);
-  
 
   if (logic == "high") {
     // if L/R sensors are both high, make them both crazy lines
@@ -240,8 +239,8 @@ void debugFrameRate() {
   fill(255);
   //text(floor(frameRate), 10, 40);
   // ff noise debug
-  text(noise1, 10, 40);
-  text(noise2, 10, 60);
+  text(emgState, 10, 40);
+  text(str(triangle), 10, 60);
   //vehicle array size debug
   //text(floor(vehicles1L.size()), 10, 60);
   //text(floor(vehicles1R.size()), 10, 80);

@@ -4,7 +4,9 @@ boolean emg3 = false;
 boolean emg4 = false;
 boolean emg5 = false;
 boolean emg6 = false;
-boolean emg7 = true;
+boolean emg7 = false;
+boolean emg8 = false;
+boolean triangle = false;
 boolean pulse1 = false;
 boolean pulse2 = false;
 boolean pulse3 = false; 
@@ -19,7 +21,7 @@ float currentMinSpeed = 0;
 
 
 
-void processControls() {
+void processControls(char inKeyChar) {
   if (inKeyChar == '1') {
     if (emg1 == false) {
       emg1 = true; 
@@ -27,12 +29,9 @@ void processControls() {
       emg3 = false;
       emg4 = false;
       emg5 = false; 
+      emg6 = false;
       return;
     }
-    //if (emg1 == true) {
-    //  emg1 = false; 
-    //  return;
-    //}
   }
 
   if (inKeyChar == '2') {
@@ -42,12 +41,9 @@ void processControls() {
       emg3 = false;
       emg4 = false;
       emg5 = false;
+      emg6 = false;
       return;
     }
-    //if (emg2 == true) {
-    //  emg2 = false; 
-    //  return;
-    //}
   }
 
   if (inKeyChar == '3') {
@@ -57,7 +53,7 @@ void processControls() {
       emg3 = true;
       emg4 = false;
       emg5 = false;
-      
+      emg6 = false;
       return;
     }
   }
@@ -68,7 +64,8 @@ void processControls() {
       emg2 = false;
       emg3 = false;
       emg4 = true;
-      emg5 = false; 
+      emg5 = false;
+      emg6 = false;
       return;
     }
 
@@ -81,23 +78,35 @@ void processControls() {
       emg3 = false;
       emg4 = false;
       emg5 = true; 
-      return;
-    }
-
-  }
-
-  if (inKeyChar == '6') {
-    if (emg6 == false) {
-      emg6 = true; 
-      return;
-    }
-    if (emg6 == true) {
-      emg6 = false; 
+      emg6 = false;
       return;
     }
   }
   
-  // turn emg off entirely
+  if (inKeyChar == '6') {
+   if (emg6 == false) {
+      emg1 = false;
+      emg2 = false;
+      emg3 = false;
+      emg4 = false;
+      emg5 = false; 
+      emg6 = true; 
+      return;
+    }
+  }
+
+  if (inKeyChar == 't') {
+    if (triangle == false) {
+      triangle = true; 
+      return;
+    }
+    if (triangle == true) {
+      triangle = false; 
+      return;
+    }
+  }
+  
+  // fade out emg
   if (inKeyChar == '0') {
     emg1 = false;
     emg2 = false;
@@ -107,7 +116,18 @@ void processControls() {
     emg6 = false;
     emg7 = true;
   }
-
+  
+  // turn off emg entirely
+  if (inKeyChar == 'o') {
+    emg1 = false;
+    emg2 = false;
+    emg3 = false;
+    emg4 = false;
+    emg5 = false;
+    emg6 = false;
+    emg7 = false;
+    emg8 = true;
+  }  
 
   // show hide pulse -- growing
   if (inKeyChar == '7') {
@@ -119,9 +139,7 @@ void processControls() {
   if (inKeyChar == '8') {
     pulse1 = false;
     pulse2 = true;
-    pulse3 = false;
-    
-    
+    pulse3 = false; 
   }
 
   // animate 
@@ -146,12 +164,18 @@ void processControls() {
 
   //increase vehicle speed
   if (inKeyChar == 'p') {
+    println("going up", minSpeed);
     minSpeed+= 0.00000001;
   }
 
   //decrease vehicle speed
   if (inKeyChar == 'l') {
-    minSpeed-= 0.00000001; 
+    if (minSpeed > 0.00000001) { // never go below zero
+      println("above", minSpeed);
+      minSpeed-= 0.00000001;
+    } else { 
+      println("below", minSpeed);
+    }
   }
   
   //slow mo on
@@ -207,8 +231,15 @@ void runControls() {
     emgRunning = true;
     emgState = 5;
   }
+  
+   if (emg6 == true) {
+    //background(0);
+    drawEmgVehicles();
+    emgRunning = true;
+    emgState = 6;
+  }
 
-  if (emg6 == true) {
+  if (triangle == true) {
     drawBigTriangle();
   }
   
@@ -216,6 +247,12 @@ void runControls() {
     drawEmgVehicles();
     emgRunning = true;
     emgState = 7;
+  }
+  
+  if (emg8 == true) {
+    drawEmgVehicles();
+    emgRunning = true;
+    emgState = 8;    
   }
 
   // start pulses, draw pulses

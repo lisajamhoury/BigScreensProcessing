@@ -21,8 +21,8 @@ float ctrPosLocY;
 boolean removePulsesSet = false;
 int pulsesToRemove = 0;
 int removePulseTime = 0;
-int removeTotalTime = 8000; // remove time in millis
-int removeRate = 100; // remove every 100 millis
+int removeTotalTime = 20000; // remove time in millis -- currently 
+int removeRate = 1000; // remove every 100 millis
 float removeIncs = removeTotalTime/removeRate; // number of times to remove at given rate
 float removeEachInc;
 
@@ -50,7 +50,6 @@ void setupMultiPulse() {
  pulseExpandUnitY = pulseExDuration/targetBoundY; //how many millis between each y bound expansion
  
  ctrPosLocY = PULSECTR.y;
-  
 }
 
 
@@ -96,7 +95,7 @@ void drawMultiPulse(){
       // check to make sure you have a bpm
       if (currentBpm > 0) { 
         //for (int i = 0; i < 20; i++) {
-          //pulseLoc = getPulseLocation();
+        //pulseLoc = getPulseLocation();
           multiPulses.add(new PulseMarker(pulseLoc));
         //} // use for debugging
       }
@@ -115,6 +114,7 @@ void drawMultiPulse(){
      removePulseTime = millis();
      removeEachInc = pulsesToRemove / removeIncs;
      removePulsesSet = true;
+     println(pulsesToRemove, removeEachInc);
    }
       
    if (millis() > removePulseTime + removeRate) {

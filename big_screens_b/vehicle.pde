@@ -92,6 +92,18 @@ class Vehicle {
     }
   }
 
+   void fadeColorDown() {
+   if (vBright >= 0) {
+     //fadeComplete = false;
+     vBright-=5;
+    } else {
+     //fadeComplete = true;
+     //drawMarker = false;
+    }
+  }
+  
+
+
   void display() {
     //float theta = velocity.heading() + PI/2;
     colorMode(HSB); // Change color for brightness
@@ -116,20 +128,29 @@ class Vehicle {
     }
     
     if (vEmgState == 5) {
-     justLines();
+     justLinesGray();
+    }
+    
+    if (vEmgState == 6) {
+     justLinesWhite();
     }
     
     // using this now to draw triangle
-    if (vEmgState == 6) {
-     justLines();
-    }
+    //if (vEmgState == 6) {
+    // justLines();
+    //}
 
     // fade all out
     if (vEmgState == 7) {
+      fadeColorDown();
+      justFlow();
+    }
+    
+    // All go black   
+    if (vEmgState == 8) {
       stroke(0, 0, 0, 0);
       fill(0, 0, 0, 0);
     }
-
 
     //strokeWeight(lineStk);
     strokeWeight(lineStk);
@@ -179,8 +200,18 @@ class Vehicle {
     stroke(0, 0, 255);
     fill(0, 0, 255);
   }
+
+  void justLinesGray() {
+    if (wrapping == true) {
+      stroke(0, 0, vBright);
+      fill(0, 0, vBright);
+    } else {
+      stroke(0, 0, 0);
+      fill(0, 0, 0);
+    }
+  }
   
-  void justLines() {
+  void justLinesWhite() {
     if (wrapping == true) {
       stroke(0, 0, 255);
       fill(0, 0, 255);

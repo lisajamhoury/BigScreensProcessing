@@ -22,17 +22,11 @@ void setup() {
 void draw() {
   background(0);
   getSensorData();
-  processControls();
   runControls();
   
-  //println(sloMo, inKeyChar);
-  //debug bpm
-  //println(currentBpm);
-  
-  
-  if (debugFlowField == true) {
-    debugFlowField();
-  }
+  //if (debugFlowField == true) {
+  //  debugFlowField();
+  //}
   //if (debugFrameRate == true) {
   //  debugFrameRate();
   //}
