@@ -8,9 +8,9 @@ float emg2RightSensor = 0;
 
 //Constants for mapping data 
 int EMG1LOWER = 10;
-int EMG1UPPER = 500; // reset high !!
+int EMG1UPPER = 500; // reset high for performer!!
 int EMG2LOWER = 10;
-int EMG2UPPER = 500; // reset high !!
+int EMG2UPPER = 500; // reset high for performer!!
 
 int LOWBPM = 30; // reset for perfomer!!
 int HIGHBPM = 120; // reset for perfomer!!
@@ -64,11 +64,28 @@ void calculateBpm() {
   
  if (timeElapsed > BPMTIMESPAN) {
   currentBpm = (ONEMINUTE/BPMTIMESPAN)*pulseCtr; 
+  currentBpm = limitBpm(currentBpm, LOWBPM, HIGHBPM);
   pulseTimeCtr = millis();
   pulseCtr = 0;
  }
  lastPulseSensorVal = pulseSensor;
 }
+
+// Keep bpm within range so all are drawn
+int limitBpm(int bpm, int lowerBound, int upperBound) {
+  if (bpm < lowerBound) {
+    bpm = lowerBound;
+  }
+  
+  if (bpm > upperBound) {
+    bpm = upperBound;
+  }
+  
+  return bpm;  
+}
+
+
+
 
 // Get logic from left and right emg sensors
 String emgLogic(float leftSensor, float rightSensor) {

@@ -23,14 +23,14 @@ class PulseMarker {
   PulseMarker(PVector iLoc) {
     location = iLoc;
     bpm = currentBpm;
-    timeBtwBeats = ONEMINUTE/bpm; // TO DO  -- test that your fix for this bug is really working, bpm hitting 0
+    timeBtwBeats = ONEMINUTE/bpm;
     prevBeatTime = millis();
-    initSize = map(currentBpm, LOWBPM, HIGHBPM, resolution, pulseSmall); // map pulse size to bpm speed 
+    initSize = map(currentBpm, LOWBPM, HIGHBPM, pulseSmall, resolution); // map pulse size to bpm speed 
     size = initSize;
     acceleration = new PVector(0,0);
-    velocityX = map(currentBpm, LOWBPM, HIGHBPM, 0.1, .5); // slower is slower 
-    velocity = new PVector(velocityX, 0);
-    clr = map(currentBpm, LOWBPM, HIGHBPM, 255, 10); // reverse mapping, slower is brighter
+    //velocityX = map(currentBpm, LOWBPM, HIGHBPM, 0.1, .5); // slower is slower 
+    //velocity = new PVector(velocityX, 0);
+    clr = map(currentBpm, LOWBPM, HIGHBPM, 10, 255); // reverse mapping, slower is brighter
     permClr = clr;
   }
   
