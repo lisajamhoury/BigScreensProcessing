@@ -30,7 +30,7 @@ class PulseMarker {
     acceleration = new PVector(0,0);
     //velocityX = map(currentBpm, LOWBPM, HIGHBPM, 0.1, .5); // slower is slower 
     //velocity = new PVector(velocityX, 0);
-    clr = map(currentBpm, LOWBPM, HIGHBPM, 10, 255); // reverse mapping, slower is brighter
+    clr = map(currentBpm, LOWBPM, HIGHBPM, 80, 255); // reverse mapping, slower is brighter
     permClr = clr;
   }
   

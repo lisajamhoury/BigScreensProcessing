@@ -93,11 +93,8 @@ void drawMultiPulse(){
       pulseCount = 0;
       PVector pulseLoc = getPulseLocation();
       // check to make sure you have a bpm
-      if (currentBpm > 0) { 
-        //for (int i = 0; i < 20; i++) {
-        //pulseLoc = getPulseLocation();
-          multiPulses.add(new PulseMarker(pulseLoc));
-        //} // use for debugging
+      if (currentBpm > 0) {           
+        multiPulses.add(new PulseMarker(pulseLoc));
       }
     }
   }
@@ -183,7 +180,7 @@ void runMultiPulse() {
 
 PVector getPulseLocation() {
  PVector newPulseLoc;
- newPulseLoc = hardXandY(pulseBoundX, pulseBoundY);
+ newPulseLoc = hardFixedXandY();
  //newPulseLoc = getCenterPulse();
  return newPulseLoc;
 }
@@ -201,6 +198,24 @@ PVector getCenterPulse() {
   return newLoc;
   
 }
+
+PVector hardFixedXandY() {
+ PVector newLoc = new PVector();
+ int pulseAmt = multiPulses.size();
+ 
+ // choose x
+ float xLine = PULSECTR.x;
+ float scaleUpXLine = resolution * pulseAmt; // get amount of width to scale by
+ newLoc.x = PULSECTR.x + scaleUpXLine;
+    
+ // choose y
+ float yLine = PULSECTR.y;
+ float scaleUpYLine = resolution * pulseAmt; // get amount of width to scale by
+ newLoc.y = PULSECTR.y + scaleUpXLine;
+ 
+ return newLoc; 
+}
+
 
 
 PVector hardXandY(int xBound, int yBound) {
