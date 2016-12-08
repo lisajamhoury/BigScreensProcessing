@@ -11,7 +11,7 @@ import java.util.Iterator;
 //DEBUG
 boolean debugFrameRate = true;
 boolean debugFlowField = false;
-boolean debugOutPoints = false;
+boolean debugOutPoints = true;
 
 //Set top and bottom for EMG sensors 
 //int emg1Low = 100;
@@ -124,6 +124,7 @@ void addEmgVehicles() {
 
   String emg1Logic = emgLogic(emg1LeftSensor, emg1RightSensor);
   String emg2Logic = emgLogic(emg2LeftSensor, emg2RightSensor);
+  
 
   if (emgState == 5) {
     makeCrazyLinesLogic(emg1Logic, v1LStart, v1RStart, flowfield1.getOutPointsLeft(), flowfield2.getOutPointsLeft()); // TO DO CHECK THESE!!!!! DOES THIS WORK?????
@@ -146,11 +147,32 @@ void addEmgVehicles() {
 
 
   //}
+  
+  if (inPositions == true) {
+    v1LStart = makeCrazyLinesInPos(flowfield1.getBoundOutPointsLeftCtr());
+    v1RStart = makeCrazyLinesInPos(flowfield1.getBoundOutPointsLeftCtr());
+    
+    //v2LStart = makeCrazyLinesInPos(flowfield1.getOutPointsLeftBound(PULSECTR));
+    //v2RStart = makeCrazyLinesInPos(flowfield1.getOutPointsLeftBound(PULSECTR));
+
+    //float bound = 0.05 * width;
+    //v1LStart.x = PULSECTR.x + (random(-bound, bound));
+    //v1LStart.y = random(height);   
+    //v1RStart.x = PULSECTR.x + (random(-bound, bound));
+    //v1RStart.y = random(height);
+    //emg1Logic = "high";
+    
+    //v2LStart.x = RIGHTEMGCTR.x + (random(-bound, bound));
+    //v2LStart.y = random(height);
+    //v2RStart.x = RIGHTEMGCTR.x + (random(-bound, bound));
+    //v2RStart.y = random(height);
+    
+  }
 
   vehicles1L.add(new Vehicle(emg1Logic, bright1L, emgState, v1LStart.x, v1LStart.y, random(AREA*minSpeed, AREA*maxSpeed), random(AREA*force)));
   vehicles1R.add(new Vehicle(emg1Logic, bright1R, emgState, v1RStart.x, v1RStart.y, random(AREA*minSpeed, AREA*maxSpeed), random(AREA*force)));
-  vehicles2L.add(new Vehicle(emg2Logic, bright2L, emgState, v2LStart.x, v2LStart.y, random(AREA*minSpeed, AREA*maxSpeed), random(AREA*force)));
-  vehicles2R.add(new Vehicle(emg2Logic, bright2R, emgState, v2RStart.x, v2RStart.y, random(AREA*minSpeed, AREA*maxSpeed), random(AREA*force)));
+  //vehicles2L.add(new Vehicle(emg2Logic, bright2L, emgState, v2LStart.x, v2LStart.y, random(AREA*minSpeed, AREA*maxSpeed), random(AREA*force)));
+  //vehicles2R.add(new Vehicle(emg2Logic, bright2R, emgState, v2RStart.x, v2RStart.y, random(AREA*minSpeed, AREA*maxSpeed), random(AREA*force)));
 }
 
 void runEmgVehicles() {
@@ -193,6 +215,45 @@ void runVehiclesIterator(FlowField flowField, ArrayList<Vehicle> vehicles, PVect
     }
   }
 }
+
+PVector makeCrazyLinesInPos(ArrayList<PVector> fieldPtsArray) {
+
+  //Choose random point from array 
+  int noOutPoints1 = fieldPtsArray.size();
+  int noPoint1 = int(random(noOutPoints1));
+  PVector newStart1 = fieldPtsArray.get(noPoint1);
+  
+  
+  //Choose random point from array of outpoints on ff2 -- correspond to right sensor
+  //int noOutPoints2 = fieldPtsArray2.size();
+  //int noPoint2 = int(random(noOutPoints2));
+  //PVector newStart2 = fieldPtsArray2.get(noPoint2);
+
+  //if (logic == "high") {
+  //  // if L/R sensors are both high, make them both crazy lines
+  //  startPosL.x = newStart1.x;
+  //  startPosL.y = height;
+  //  startPosR.x = newStart2.x;
+  //  startPosR.y = height;
+  //} else if (logic == "left high") {
+  //  // if the left is high, turn just the right into a crazy line
+  //  startPosL.x = newStart1.x;
+  //  startPosL.y = height;
+  //} else if (logic == "right high") {
+  //  // if the right is high, turn just the right into a crazy line
+  //  startPosR.x = newStart2.x;
+  //  startPosR.y = height;
+  //} else if (logic == "low") {
+  //  // if both are L/R sensors are low, keep moving and keep in vertical center 
+  //  float yOff = 0.1 * height;
+  //  startPosL.y = height/2 + random(-yOff, yOff);
+  //  startPosR.y = height/2 + random(-yOff, yOff);
+  //}
+  return newStart1;
+}
+
+
+
 
 
 void makeCrazyLinesLogic(String logic, PVector startPosL, PVector startPosR, ArrayList<PVector> fieldPtsArray1, ArrayList<PVector> fieldPtsArray2) {

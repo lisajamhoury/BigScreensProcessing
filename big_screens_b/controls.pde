@@ -15,6 +15,7 @@ boolean fadePulsesUp = false;
 boolean fadePulsesDown = false;
 
 boolean pulseTimerStarted = false;
+boolean inPositions = true;
 
 boolean sloMo = false;
 float currentMinSpeed = 0;
@@ -107,6 +108,18 @@ void processControls(char inKeyChar) {
     return;
     } 
   }
+  
+   if (inKeyChar == 'u') {
+    if (inPositions == false) {
+      inPositions = true; 
+    }
+  }
+
+   if (inKeyChar == 'i') {
+    if (inPositions == true) {
+      inPositions = false; 
+    }
+  }  
   
   
   // fade out emg
