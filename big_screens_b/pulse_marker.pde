@@ -85,15 +85,9 @@ class PulseMarker {
   
       fill(255,255,255,clr);
       noStroke();
-  
-      //ellipse(location.x, location.y, size, size);
-      //ellipse(location.x, location.y, size/2, size/2);
-      //ellipse(location.x, location.y, size/3, size/3);
       rectMode(CENTER);
       rect(location.x, location.y, size, rH);
       rect(location.x, location.y, rH, size);
-      //rect(location.x, location.y, size/2, rH/2);
-      //rect(location.x, location.y, size/3, rH/3);
       rectMode(CORNER);
     }
 

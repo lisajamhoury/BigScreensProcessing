@@ -24,6 +24,8 @@ void draw() {
   getSensorData();
   runControls();
   
+  pulseRectHeight+=pulseRectHeight;
+  
   //if (debugFlowField == true) {
   //  debugFlowField();
   //}
