@@ -42,7 +42,7 @@ ArrayList<PulseMarker> multiPulses;
 void setupMultiPulse() { 
  multiPulses = new ArrayList<PulseMarker>();
  
- pulseExDuration = 60000; //expand pulse over one minute  
+ pulseExDuration = 180000; //expand pulse over three minutes  
  targetBoundX = columns/2; // set the target width for each half
  targetBoundY = rows/4; // set the target height for each half
  

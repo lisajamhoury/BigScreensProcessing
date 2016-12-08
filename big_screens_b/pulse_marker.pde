@@ -2,6 +2,7 @@ class PulseMarker {
   PVector location;
   float pulseSmall = 0.0007 * width;
   float pulseLarge = 0.0030 * width;
+  float pulseInc = pulseSmall/10;
   float rH = pulseRectHeight;
   float initSize;
   float size;
@@ -9,7 +10,7 @@ class PulseMarker {
   float permClr;
   float opacity = 50;
   float pulseSzMultiplier = 10;
-  float lerpAmount = 0.09;
+  float lerpAmount = 0.01;
   int bpm;
   int prevBeatTime;
   int timeSinceBeat = 0;
@@ -66,25 +67,33 @@ class PulseMarker {
   }
 
   void run() {
+    initSize +=pulseInc;
+    size+=pulseInc;
     if (drawMarker == true) {
       if (animate == true) animate();
    
-      timeSinceBeat = millis() - prevBeatTime;
+        timeSinceBeat = millis() - prevBeatTime;
       
       if (timeSinceBeat > timeBtwBeats) {
+
         size = lerp(size, initSize * pulseSzMultiplier, lerpAmount);
         prevBeatTime = millis();
       } else {
         size = lerp(size, initSize, lerpAmount);
       }
   
-      fill(clr);
+  
+      fill(255,255,255,clr);
       noStroke();
   
+      //ellipse(location.x, location.y, size, size);
+      //ellipse(location.x, location.y, size/2, size/2);
+      //ellipse(location.x, location.y, size/3, size/3);
       rectMode(CENTER);
       rect(location.x, location.y, size, rH);
-      rect(location.x, location.y, size/2, rH/2);
-      rect(location.x, location.y, size/3, rH/3);
+      rect(location.x, location.y, rH, size);
+      //rect(location.x, location.y, size/2, rH/2);
+      //rect(location.x, location.y, size/3, rH/3);
       rectMode(CORNER);
     }
 
