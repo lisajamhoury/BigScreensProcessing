@@ -30,13 +30,13 @@ class PulseMarker {
     bpm = currentBpm;
     timeBtwBeats = ONEMINUTE/bpm;
     prevBeatTime = millis();
-    initSize = map(currentBpm, LOWBPM, HIGHBPM, pulseSmall*4, resolution*4); // map pulse size to bpm speed 
+    initSize = map(currentBpm, LOWBPM, HIGHBPM, resolution, pulseSmall); // reverse map pulse size to bpm speed 
     size = initSize;
     lerpSize = size;
     acceleration = new PVector(0, 0);
     //velocityX = map(currentBpm, LOWBPM, HIGHBPM, 0.1, .5); // slower is slower 
     //velocity = new PVector(velocityX, 0);
-    clr = map(currentBpm, LOWBPM, HIGHBPM, 10, 255); // reverse mapping, slower is brighter
+    clr = map(currentBpm, LOWBPM, HIGHBPM, 100, 10); // reverse mapping, slower is brighter
     permClr = clr;
   }
 
@@ -72,7 +72,9 @@ class PulseMarker {
   
   void run() {
     if (newPulse == true) {
-       drawPulseCircle();
+       //drawPulseCircle();
+       drawPulseCircleDiam();
+       //drawPulseCircleEllipse();
     } else { 
       drawCross();
     } 
@@ -81,32 +83,7 @@ class PulseMarker {
   float diam = 0;
   float diamSpeed = 0.5;
   
-  //void drawPulseCircleDiam() {
-  //  imageMode(CENTER);
-  //  image(circleImg, location.x, location.y, diam, diam);
-   
-  //  diam+=diamSpeed;
-  //  for (float d = diam; d > 1; d--) {
-  //  //fill(255, 255/d);
-  //    tint(255, 255/d);
-  //    image(circleImg, location.x, location.y, d, d);
-  //    ellipse(width/2, height/2, d, d);
-  //  }
-    
-  //  if(diam > size) {
-  //    diamSpeed *= -1;
-  //    beatCtr = true;
-  //  }
-    
-  //  if (diam < 1 && beatCtr == true) {
-  //    newPulse= false;
-  //  }
-    
-  //}
-
- 
-  
- void drawPulseCircleDiam() {
+  void drawPulseCircleDiam() {
     imageMode(CENTER);
     image(circleImg, location.x, location.y, diam, diam);
    
@@ -128,33 +105,83 @@ class PulseMarker {
     }
     
   }
+
+ 
+  
+ //void drawPulseCircleDiam() {
+ //   imageMode(CENTER);
+ //   image(circleImg, location.x, location.y, diam, diam);
+   
+ //   diam+=diamSpeed;
+ //   for (float d = diam; d > 1; d--) {
+ //   //fill(255, 255/d);
+ //     tint(255, 255/d);
+ //     image(circleImg, location.x, location.y, d, d);
+ //     ellipse(width/2, height/2, d, d);
+ //   }
+    
+ //   if(diam > size) {
+ //     diamSpeed *= -1;
+ //     beatCtr = true;
+ //   }
+    
+ //   //if (diam < 1 && beatCtr == true) {
+ //   //  newPulse= false;
+ //   //}
+    
+ // }
   
   void drawPulseCircle() {
     if (beat == true && beatCtr == false) {
       beatCtr = true;
-      lerpSize = lerp(0, initSize * 10, 0.05);
-      lerpTint = lerp(0,255, 0.05);
+      lerpSize = lerp(0, initSize * 10, 0.1);
+      //lerpTint = lerp(0,255, 0.05);
+    }  else {
+      lerpSize = lerp(lerpSize, 0, 0.05);
+      //lerpTint = lerp(255, 0, 0.05);
     } 
     
-    else {
-      lerpSize = lerp(lerpSize, 0, 0.05);
-      lerpTint = lerp(255, 0, 0.05);
-    }
+   //if (beat == true) {
+    //  lerpSize = lerp(lerpSize, initSize * 10, 0.1);
+    //} else {
+    //  lerpSize = lerp(lerpSize, 0, 0.05);
+    //}
     
     imageMode(CENTER);
-    tint(255, lerpTint);
+    tint(255, 50);
+    //tint(255, lerpTint);
     image(circleImg, location.x, location.y, lerpSize, lerpSize);
     
-    if (lerpSize < 1 && beatCtr == true) {
-      newPulse = false;
-      initSize = lerpSize;
-      size = lerpSize;
-    }
+    //if (lerpSize < 1 && beatCtr == true) {
+    //  newPulse = false;
+    //  initSize = lerpSize;
+    //  size = lerpSize;
+    //}
     
     //if (beatCtr == true) {
     // newPulse = false; 
    //}//
   }
+  
+  void drawPulseCircleEllipse() {
+    if (beat == true) {
+      lerpSize = lerp(lerpSize, initSize * 10, 0.1);
+    } else {
+      lerpSize = lerp(lerpSize, initSize, 0.05);
+    }
+
+    fill(clr, 50);
+    noStroke();
+    ellipse(location.x, location.y, lerpSize, lerpSize);
+    //ellipse(location.x, location.y, lerpSize/2, lerpSize/2);
+    //ellipse(location.x, location.y, lerpSize/3, lerpSize/3);
+    
+  }
+  
+  
+  
+  
+  
   
 
   void drawCross() {
