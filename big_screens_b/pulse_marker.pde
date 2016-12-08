@@ -81,54 +81,7 @@ class PulseMarker {
   float diam = 0;
   float diamSpeed = 0.5;
   
-  //void drawPulseCircleDiam() {
-  //  imageMode(CENTER);
-  //  image(circleImg, location.x, location.y, diam, diam);
-   
-  //  diam+=diamSpeed;
-  //  for (float d = diam; d > 1; d--) {
-  //  //fill(255, 255/d);
-  //    tint(255, 255/d);
-  //    image(circleImg, location.x, location.y, d, d);
-  //    ellipse(width/2, height/2, d, d);
-  //  }
-    
-  //  if(diam > size) {
-  //    diamSpeed *= -1;
-  //    beatCtr = true;
-  //  }
-    
-  //  if (diam < 1 && beatCtr == true) {
-  //    newPulse= false;
-  //  }
-    
-  //}
 
- 
-  
- void drawPulseCircleDiam() {
-    imageMode(CENTER);
-    image(circleImg, location.x, location.y, diam, diam);
-   
-    diam+=diamSpeed;
-    for (float d = diam; d > 1; d--) {
-    //fill(255, 255/d);
-      tint(255, 255/d);
-      image(circleImg, location.x, location.y, d, d);
-      ellipse(width/2, height/2, d, d);
-    }
-    
-    if(diam > size) {
-      diamSpeed *= -1;
-      beatCtr = true;
-    }
-    
-    if (diam < 1 && beatCtr == true) {
-      newPulse= false;
-    }
-    
-  }
-  
   void drawPulseCircle() {
     if (beat == true && beatCtr == false) {
       beatCtr = true;
@@ -173,8 +126,8 @@ class PulseMarker {
         size = lerp(size, initSize, lerpAmount);
       }
 
-
-      fill(255, 255, 255, clr);
+      colorMode(RGB);
+      fill(clr);
       noStroke();
       rectMode(CENTER);
       rect(location.x, location.y, size, rH);
