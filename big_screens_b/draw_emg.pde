@@ -9,7 +9,7 @@ void setupDrawSensors() {
 import java.util.Iterator;
 
 //DEBUG
-boolean debugFrameRate = true;
+boolean debugFrameRate = false;
 boolean debugFlowField = false;
 boolean debugOutPoints = false;
 

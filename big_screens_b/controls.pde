@@ -98,13 +98,16 @@ void processControls(char inKeyChar) {
   if (inKeyChar == 't') {
     if (triangle == false) {
       triangle = true; 
-      return;
-    }
-    if (triangle == true) {
-      triangle = false; 
-      return;
     }
   }
+  
+  if (inKeyChar == 'y') {
+    if (triangle == true) {
+     triangle = false; 
+    return;
+    } 
+  }
+  
   
   // fade out emg
   if (inKeyChar == '0') {
