@@ -30,8 +30,11 @@ boolean animate = false;
 
 PImage circleImg;
 
+<<<<<<< HEAD
 int pulseFadeDownInc = 600; //in frames 10 seconds * 60fps 
 
+=======
+>>>>>>> 6a09888b03413820b29bfb69954ff5beb21abef6
 
 //////////////// MULTI PULSE ////////////////
 boolean growing = false;

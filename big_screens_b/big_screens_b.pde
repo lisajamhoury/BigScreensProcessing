@@ -21,7 +21,11 @@ void setup() {
 
 void draw() {
  background(0);
+<<<<<<< HEAD
  //fill(0,10);
+=======
+ //fill(0,20);
+>>>>>>> 6a09888b03413820b29bfb69954ff5beb21abef6
  //rect(0,0,width,height);
   getSensorData();
   runControls();
