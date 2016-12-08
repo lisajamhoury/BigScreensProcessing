@@ -25,12 +25,12 @@ class PulseMarker {
     bpm = currentBpm;
     timeBtwBeats = ONEMINUTE/bpm;
     prevBeatTime = millis();
-    initSize = map(currentBpm, LOWBPM, HIGHBPM, pulseSmall, resolution); // map pulse size to bpm speed 
+    initSize = map(currentBpm, LOWBPM, HIGHBPM, resolution, pulseSmall); // reverse mapping, slower is larger
     size = initSize;
     acceleration = new PVector(0,0);
     //velocityX = map(currentBpm, LOWBPM, HIGHBPM, 0.1, .5); // slower is slower 
     //velocity = new PVector(velocityX, 0);
-    clr = map(currentBpm, LOWBPM, HIGHBPM, 10, 255); // reverse mapping, slower is brighter
+    clr = map(currentBpm, LOWBPM, HIGHBPM, 255, 100); // reverse mapping, slower is brighter
     permClr = clr;
   }
   
