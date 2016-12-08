@@ -22,8 +22,11 @@ float currentMinSpeed = 0;
 
 
 void processControls(char inKeyChar) {
+  println("processing", inKeyChar);
   if (inKeyChar == '1') {
+    println("got 1");
     if (emg1 == false) {
+      println("starting emg");
       emg1 = true; 
       emg2 = false;
       emg3 = false;

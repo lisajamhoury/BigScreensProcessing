@@ -7,7 +7,7 @@ void setup() {
   //size(1920, 180, P3D); //Aaron's projector 
   //size(1440, 135, P3D);
   surface.setLocation(0,0);
-  
+  frameRate(30);
   background(0);
   smooth(4);
   noCursor();
@@ -22,7 +22,9 @@ void setup() {
 void draw() {
   background(0);
   getSensorData();
+  runTimer();
   runControls();
+  
   
   //if (debugFlowField == true) {
   //  debugFlowField();

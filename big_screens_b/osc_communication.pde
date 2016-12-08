@@ -33,6 +33,7 @@ void oscEvent(OscMessage theOscMessage) {
     int inKey = theOscMessage.get(0).intValue();
     //change incoming key press from ascii to char
     char inKeyChar = char(inKey);
+    println("osc controls ut oh");
     processControls(inKeyChar);
   }
   
