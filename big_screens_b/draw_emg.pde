@@ -237,10 +237,10 @@ void debugFrameRate() {
   fill(255, 0, 0);
   rect(0, 0, 100, 100);
   fill(255);
-  //text(floor(frameRate), 10, 40);
+  text(floor(frameRate), 10, 40);
   // ff noise debug
-  text(emgState, 10, 40);
-  text(str(triangle), 10, 60);
+  //text(emgState, 10, 40);
+  //text(str(triangle), 10, 60);
   //vehicle array size debug
   //text(floor(vehicles1L.size()), 10, 60);
   //text(floor(vehicles1R.size()), 10, 80);

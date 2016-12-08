@@ -28,6 +28,8 @@ float removeEachInc;
 
 boolean animate = false;
 
+PImage circleImg;
+
 
 //////////////// MULTI PULSE ////////////////
 boolean growing = false;
@@ -50,6 +52,8 @@ void setupMultiPulse() {
  pulseExpandUnitY = pulseExDuration/targetBoundY; //how many millis between each y bound expansion
  
  ctrPosLocY = PULSECTR.y;
+ 
+ circleImg = loadImage("images/circle.png");
 }
 
 

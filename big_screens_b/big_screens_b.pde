@@ -20,17 +20,18 @@ void setup() {
 }
 
 void draw() {
-  background(0);
+ background(0);
+ //fill(0,10);
+ //rect(0,0,width,height);
   getSensorData();
   runControls();
   
-  pulseRectHeight+=pulseRectHeight;
   
   //if (debugFlowField == true) {
   //  debugFlowField();
   //}
-  //if (debugFrameRate == true) {
-  //  debugFrameRate();
-  //}
+  if (debugFrameRate == true) {
+    debugFrameRate();
+  }
 
 }
