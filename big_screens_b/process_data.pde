@@ -35,6 +35,12 @@ void getSensorData() {
  emg1RightSensor = mapEmgData(emg1R, EMG1LOWER, EMG1UPPER);
  emg2LeftSensor = mapEmgData(emg2L, EMG2LOWER, EMG2UPPER); 
  emg2RightSensor = mapEmgData(emg2R, EMG2LOWER, EMG2UPPER);
+ 
+ //IF RUNNING OFF OF FAKE DATA SWITCH SENSOR SIDES
+ //emg2LeftSensor = mapEmgData(emg1L, EMG1LOWER, EMG1UPPER);
+ //emg2RightSensor = mapEmgData(emg1R, EMG1LOWER, EMG1UPPER);
+ //emg1LeftSensor = mapEmgData(emg2L, EMG2LOWER, EMG2UPPER); 
+ //emg1RightSensor = mapEmgData(emg2R, EMG2LOWER, EMG2UPPER);
  pulseSensor = polar0;
  
  calculateBpm();
