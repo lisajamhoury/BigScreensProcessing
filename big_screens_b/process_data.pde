@@ -18,8 +18,8 @@ int HIGHBPM = 120; // reset for perfomer!!
 //Pulse bpm timing
 int pulseTimeCtr; // count time elapsed since last calculation
 int pulseCtr = 0; // count number of pulses
-int BPMTIMESPAN = 5000; // take bpm every 5 seconds 
-int ONEMINUTE = 60000;
+int BPMTIMESPAN = 150; // take bpm every 5 seconds now in frames
+int ONEMINUTE = 1800; // now in frames
 int lastPulseSensorVal;
 int currentBpm;
 
@@ -27,7 +27,7 @@ int currentBpm;
 boolean pulse = false;
 
 void setupProcessData() {
-  pulseTimeCtr = millis();
+  pulseTimeCtr = frameCount;
 }
 
 void getSensorData() { 
@@ -56,7 +56,7 @@ float mapEmgData(float sensorReading, int lowerBound, int upperBound) {
 
 
 void calculateBpm() {
- int timeElapsed = millis() - pulseTimeCtr; 
+ int timeElapsed = frameCount - pulseTimeCtr; 
 
  if (pulseSensor == 1 && lastPulseSensorVal == 0) {
    pulseCtr++;
@@ -65,7 +65,7 @@ void calculateBpm() {
  if (timeElapsed > BPMTIMESPAN) {
   currentBpm = (ONEMINUTE/BPMTIMESPAN)*pulseCtr; 
   currentBpm = limitBpm(currentBpm, LOWBPM, HIGHBPM);
-  pulseTimeCtr = millis();
+  pulseTimeCtr = frameCount;
   pulseCtr = 0;
  }
  lastPulseSensorVal = pulseSensor;

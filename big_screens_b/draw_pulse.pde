@@ -21,8 +21,10 @@ float ctrPosLocY;
 boolean removePulsesSet = false;
 int pulsesToRemove = 0;
 int removePulseTime = 0;
-int removeTotalTime = 20000; // remove time in millis -- currently 
-int removeRate = 1000; // remove every 100 millis
+//int removeTotalTime = 20000; // remove time in millis -- currently 
+//int removeRate = 1000; // remove every 100 millis
+int removeTotalTime = 600; // remove time in frames for 30fps 
+int removeRate = 3; // remove rate in frames
 float removeIncs = removeTotalTime/removeRate; // number of times to remove at given rate
 float removeEachInc;
 
@@ -42,7 +44,7 @@ ArrayList<PulseMarker> multiPulses;
 void setupMultiPulse() { 
  multiPulses = new ArrayList<PulseMarker>();
  
- pulseExDuration = 60000; //expand pulse over one minute  
+ pulseExDuration = 1800; //expand pulse over one minute -- frames in 30fps
  targetBoundX = columns/2; // set the target width for each half
  targetBoundY = rows/4; // set the target height for each half
  
@@ -54,22 +56,22 @@ void setupMultiPulse() {
 
 
 void expandPulseBounds() {
- int pulseTimeElapsedX = millis() - pulseIncTimeX;
- int pulseTimeElapsedY = millis() - pulseIncTimeY;
+ int pulseTimeElapsedX = frameCount - pulseIncTimeX;
+ int pulseTimeElapsedY = frameCount - pulseIncTimeY;
  
  if (pulseTimeElapsedX > pulseExpandUnitX) {
    if (pulseBoundX <= targetBoundX+5) { // stop incrementing when all columns are in bounds. need to take into account pulse ctr shift
      pulseBoundX++;
    }
        
-   pulseIncTimeX = millis();
+   pulseIncTimeX = frameCount;
  }
  
  if (pulseTimeElapsedY > pulseExpandUnitY) {
    if (pulseBoundY <= targetBoundY) {
      pulseBoundY++;
    }
-   pulseIncTimeY = millis();
+   pulseIncTimeY = frameCount;
  } 
 }
 
@@ -111,13 +113,13 @@ void drawMultiPulse(){
  if (growing == false) {
    if (removePulsesSet == false) {
      pulsesToRemove = multiPulses.size();  
-     removePulseTime = millis();
+     removePulseTime = frameCount;
      removeEachInc = pulsesToRemove / removeIncs;
      removePulsesSet = true;
      println(pulsesToRemove, removeEachInc);
    }
       
-   if (millis() > removePulseTime + removeRate) {
+   if (frameCount > removePulseTime + removeRate) {
      if (multiPulses.size() > removeEachInc) { 
        for (int i = 0; i < removeEachInc; i++) {
          int pos = multiPulses.size() - 1;
@@ -127,7 +129,7 @@ void drawMultiPulse(){
       int pos = multiPulses.size() - 1;
       multiPulses.remove(pos);
     }  
-   removePulseTime = millis();
+   removePulseTime = frameCount;
  }
    
  } // growing false 
