@@ -30,6 +30,8 @@ boolean animate = false;
 
 PImage circleImg;
 
+int pulseFadeDownInc = 600; //in frames 10 seconds * 60fps 
+
 
 //////////////// MULTI PULSE ////////////////
 boolean growing = false;
@@ -163,7 +165,7 @@ void runMultiPulse() {
    }
     
    if (fadePulsesDown == true) {
-     multiPulses.get(i).fadeColorDown();
+     multiPulses.get(i).fadeColorDown(pulseFadeDownInc);
      //check if each pulse has finished fading 
      if (multiPulses.get(i).getFadeStatus() == false) {
        allPulsesFaded = false;

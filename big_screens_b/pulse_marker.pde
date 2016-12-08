@@ -9,7 +9,7 @@ class PulseMarker {
   float lerpSize;
   float clr;
   float permClr;
-  float opacity = 50;
+  float opacity = 255;
   float pulseSzMultiplier = 10;
   float lerpAmount = 0.01;
   int bpm;
@@ -24,6 +24,8 @@ class PulseMarker {
   boolean newPulse = true;
   boolean beatCtr = false;
   float lerpTint = 0;
+  int lifeTimeFade = 1800; // in frames 30 seconds * 60 fps 
+  float fadeInc;
 
   PulseMarker(PVector iLoc) {
     location = iLoc;
@@ -36,14 +38,18 @@ class PulseMarker {
     acceleration = new PVector(0, 0);
     //velocityX = map(currentBpm, LOWBPM, HIGHBPM, 0.1, .5); // slower is slower 
     //velocity = new PVector(velocityX, 0);
-    clr = map(currentBpm, LOWBPM, HIGHBPM, 255, 100); // reverse mapping, slower is brighter
+    clr = map(currentBpm, LOWBPM, HIGHBPM, 200, 50); // reverse mapping, slower is brighter
     permClr = clr;
   }
 
-  void fadeColorDown() {
+  void fadeColorDown(int frames) {
+    if (fadeComplete == true) {
+      fadeInc = clr/frames;
+    }
+    
     if (clr >= 0) {
       fadeComplete = false;
-      clr-=1;
+      clr-=fadeInc;
     } else {
       fadeComplete = true;
       drawMarker = false;
@@ -127,6 +133,7 @@ class PulseMarker {
       }
 
       colorMode(RGB);
+      fadeColorDown(lifeTimeFade);
       fill(clr);
       noStroke();
       rectMode(CENTER);
