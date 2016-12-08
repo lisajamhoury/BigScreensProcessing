@@ -106,7 +106,7 @@ class Vehicle {
 
   void display() {
     //float theta = velocity.heading() + PI/2;
-    colorMode(RGB); // Change color for brightness
+    colorMode(HSB); // Change color for brightness
    
     if (vEmgState == 1) {
       //only draw flow lines
@@ -162,7 +162,7 @@ class Vehicle {
       //line(pos.x, pos.y, prevPos.x, prevPos.y);
     }
     endShape();
-    colorMode(RGB); // Reset color mode
+    colorMode(HSB); // Reset color mode
   }
 
   void justFlow() {
@@ -171,7 +171,7 @@ class Vehicle {
       //fill(0, 0, 0);
       noFill();
     } else {
-      stroke(255, 255, 255, vBright);
+      stroke(0, 0, vBright);
       //fill(0, 0, vBright);
       noFill();
     }
