@@ -2,7 +2,7 @@ import oscP5.*;
 import netP5.*;
  
 //config
-int listeningPort = 6001;  
+int listeningPort = 6003;  
 
 //variables for receiving data
 int polar0;
