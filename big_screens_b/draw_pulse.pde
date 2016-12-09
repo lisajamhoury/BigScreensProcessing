@@ -94,8 +94,8 @@ void drawMultiPulse(){
       PVector pulseLoc = getPulseLocation();
       // check to make sure you have a bpm
       if (currentBpm > 0) { 
-        //for (int i = 0; i < 20; i++) {
-        //pulseLoc = getPulseLocation();
+        //for (int i = 0; i < 40; i++) {
+          //pulseLoc = getPulseLocation();
           multiPulses.add(new PulseMarker(pulseLoc));
         //} // use for debugging
       }

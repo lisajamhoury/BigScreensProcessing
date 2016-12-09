@@ -30,8 +30,11 @@ class PulseMarker {
     acceleration = new PVector(0,0);
     //velocityX = map(currentBpm, LOWBPM, HIGHBPM, 0.1, .5); // slower is slower 
     //velocity = new PVector(velocityX, 0);
-    clr = map(currentBpm, LOWBPM, HIGHBPM, 255, 100); // reverse mapping, slower is brighter
-    permClr = clr;
+    permClr = map(currentBpm, LOWBPM, HIGHBPM, 255, 100); // reverse mapping, slower is brighter
+    clr = permClr;
+    if (drawPulse == false) {
+      clr = 0;
+    }
   }
   
   void fadeColorDown() {
@@ -45,15 +48,14 @@ class PulseMarker {
   }
   
   void fadeColorUp() {
-    if (clr < permClr) {
+    if (clr < permClr/3) {
       if (drawMarker == false) {
         drawMarker = true;
       }
-     fadeComplete = false;
+      fadeComplete = false;
       clr += 1;
     } else {
      fadeComplete = true;
-      
     }
   }
   

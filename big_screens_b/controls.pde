@@ -304,9 +304,10 @@ void runControls() {
       fadePulsesDown = false;
     }
     
+    growing = false;
     drawPulse = true;
     //if (currentBpm > 10) {
-    growing = false;
+    
 
     expandPulseBounds();
       //noBoundExpansion();
